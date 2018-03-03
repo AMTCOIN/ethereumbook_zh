@@ -1,0 +1,239 @@
+
+=== 代币标准
+
+在以太坊之前区块链代币就已经存在. 某种意义上来说, 首个区块链货币-比特币本身也是代币。在以太坊之前，也曾开发出很多基于比特币和其他加密货币的代币平台。然而，以太坊首次引入的代币标准引爆了代币规模。
+
+Vitalik Buterin提议代币作为诸如以太坊这类通用编程区块链的最显著和有用的应用之一。实际上，在以太坊诞生的第一年，经常能看到Vitalik和别人穿着背面印有以太坊logo和一小段智能合约代码示例的T恤啥。T恤衫样式多种多样，但是最相似的地方是都展示一段token实现的代码。
+
+==== ERC20 代币标准
+
+Fabian Vogelsteller在2015年9月提出首个标准，作为以太坊请求合并提议（ERC）。它被github自动编号为20号提议，这就是“ERC20代币”名称的由来。目前大部分代币基于ERC20。ERC20合并请求，最终成为以太坊改进提议20（EIP20），但是大家仍旧用它原来的名字ERC20。你可以通过下面链接了解这个标准:
+
+https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md
+
+ERC20是为_代币_提出的标准，这就意味着不同种类的ERC20代币可以互相取代，而且每种代币并没有什么特殊的地方。
+ERC20标准为实现代币的合约定义了相同的接口，因此任一兼容的代币都可以用相同的方式获取和使用。接口除包含一些在基于ERC20标准开发的时候必须实现的函数外，还有一些由开发者自己决定的可选函数和属性。
+
+===== ERC20 必须实现的函数&事件
+
+totalSupply函数:: 返回代币现有的总数,ERC20代币的总数可以是固定的或者可变的。
+
+balanceOf函数:: 输入一个地址，返回该地址的代币余额。
+
+transfer函数:: 输入一个地址和一定数额, 从执行transfer函数的地址余额中转到该地址该数量代币。
+
+transferFrom函数:: 输入一个发送者，接收者和数额,从一个账户里转账代币到另一个账户。跟下面的+approve+函数一起使用。
+
+approve函数:: 输入接收者地址和数额，授权那个地址从发起批准指令的账户中执行若干次转账直到达到数额要求。
+
+allowance函数:: 输入所有者地址和消费者地址，返回消费者能从所有者取走的余额。
+
+Transfer事件:: 成功执行transfer指令后触发的事件(调用+transfer+函数或者+transferFrom+函数) (即使转账0也会触发).
+
+Approval事件:: 成功调用+approve+函数后记录的事件。
+
+===== ERC20可选实现的函数
+
+name函数:: 返回一个该代币的易读名字（例如美元）
+
+symbol函数:: 返回一个该代币的易读代号（例如USD）
+
+decimals函数:: 返回用于分割代币数量的精度。譬如假如精度是2,那么呈现在用户面前的是被100整除后的代币数量。
+
+===== Solidity中定义的ERC20标准
+
+下面就是ERC20接口标准在Solidity中的样子:
+
+----
+contract ERC20 {
+   function totalSupply() constant returns (uint theTotalSupply);
+   function balanceOf(address _owner) constant returns (uint balance);
+   function transfer(address _to, uint _value) returns (bool success);
+   function transferFrom(address _from, address _to, uint _value) returns (bool success);
+   function approve(address _spender, uint _value) returns (bool success);
+   function allowance(address _owner, address _spender) constant returns (uint remaining);
+   event Transfer(address indexed _from, address indexed _to, uint _value);
+   event Approval(address indexed _owner, address indexed _spender, uint _value);
+}
+----
+
+===== ERC20数据结构
+
+如果你去看任何ERC20的实现方式，都会包含两种数据结构，一种用于追踪余额，另一个用于追踪限额。在Solidity中，他们使用_数据映射_来实现。 
+
+第一个数据映射实现用户代币余额的初始表，它允许代币合约追踪谁持有代币。每笔转账就是一次一个账户余额的减少和另个账户余额的增加。
+
+.余额: 从地址（所有者）到账目（余额）的一次映射
+----
+mapping(address => uint256) balances;
+----
+
+第二类数据结构是限额的一次数据映射，正如我们即将在<<transfer_workflows>>所见,使用ERC20代币的时候，代币所有者可以授权给消费者，允许他们从所有者余额中花特定数（限额）目。ERC20合约使用一个二维的映射追踪限额，主键是所有者的地址，映射到消费者地址和限额额度。
+
+.限额: 一次从地址（所有者）到地址（消费者）到额度（限额）的映射
+----
+mapping (address => mapping (address => uint256)) public allowed;
+----
+
+
+[[transfer_workflows]]
+===== ERC20工作流: "transfer" 和 "approve & transferFrom"
+
+ERC20代币有两个传输函数，你可能会疑惑为什么要这样。
+
+ERC20允许两种不同的工作流。第一种是单向交易，使用transfer函数的直接工作流。这种工作流用于一些钱包发给其他钱包代币。大部分代币交易以这种+传输+流程产生。
+
+执行这种转账合约很简单。如果Alice想给Bob发送10枚代币，她的钱包发送一个交易指令到代币合约地址，调用transfer函数，以Bob的地址和10作为参数。代币合约调整Alice的余额（-10）和Bob的余额（+10）以及触发一个transfer事件。
+
+第二种工作流程是一个使用approve和transferFrom函数的双向交易流。这种工作流允许代币持有者委托他们的权限给另外一个地址。经常用于委托权限给一个用于分发代币的合约，不过也可以用于交易。例如，加入一家公司正在销售代币来ICO，他们可以授权给一个crowdsale合约地址来分发一定数量的代币。crowdsale合约然后可以把代币合约所有者的余额转给每一个该代币的购买者。
+
+[[approve_transferFrom_workflow]]
+.ERC20代币两步授权和转账流程图
+image::images/approve_transferFrom_workflow.png["The two-step approve & transferFrom workflow of ERC20 tokens"]
+
+For the +approve & transferFrom+ workflow, two transactions are needed. Let's say that Alice wants to allow the AliceICO contract to sell 50% of all the AliceCoin tokens to buyers like Bob and Charlie. First, Alice launches the AliceCoin ERC20 contract, issuing all the AliceCoin to her own address. Then, Alice launches the AliceICO contract that can sell tokens for ether. Next, Alice initiates the +approve & transferFrom+ workflow. She sends a transaction to AliceCoin, calling +approve+, with the address of AliceICO and 50% of the +totalSupply+. This will trigger the +Approval+ event. Now, the AliceICO contract can sell AliceCoin. When AliceICO receives ether from Bob, it needs to send some AliceCoin to Bob in return. To do that, AliceICO calls the AliceCoin +transferFrom+ function, with Alice's address as the sender, Bob's address as the recipient and the amount of tokens to give Bob. The AliceCoin contract transfers the balance from Alice's address to Bob's address and triggers a +Transfer+ event. The AliceICO contract can call +transferFrom+ an unlimited number of times, as long as it doesn't exceed the approval limit Alice set. The AliceICO contract can keep track of how many AliceCoin tokens it can sell by calling the +allowance+ function.
+
+===== ERC20 Implementations
+
+While it is possible to implement an ERC20-compatible token in about thirty lines of Solidity code, most implementations are more complex, to account for potential security vulnerabilities. There are two implementations mentioned in the EIP20 standard:
+
+Consensys EIP20:: A simple and easy to read implementation of an ERC20-compatible token.
+
+You can read the Solidity code for Consensys' implementation here:
+https://github.com/ConsenSys/Tokens/blob/master/contracts/eip20/EIP20.sol
+
+OpenZeppelin StandardToken:: This implementation is ERC20-compatible, with additional security precautions. It forms the basis of OpenZeppelin libraries implementing more complex ERC20-compatible tokens with fundraising caps, auctions, vesting schedules and other features.
+
+You can see the Solidity code for OpenZeppelin StandardToken here:
+https://github.com/OpenZeppelin/zeppelin-solidity/blob/master/contracts/token/ERC20/StandardToken.sol
+
+[[metoken_example]]
+==== Launching our own ERC20 token
+
+Let's create and launch our own token. For this example, we will use the +truffle+ framework (see <<truffle>>). The example assumes you have already installed +truffle+, configured it, and are familiar with its basic operation.
+
+We will call our token "Mastering Ethereum Token", with symbol "MET".
+
+You can find this example in the book's GitHub repository:
+https://github.com/ethereumbook/ethereumbook/blob/first_edition/code/METoken
+
+First, let's create and initialize a truffle project directory, the same way we did in <<truffle_project_directory>>. Run these four commands and accept the default answers to any questions:
+
+----
+$ mkdir METoken
+$ cd METoken
+METoken $ truffle init
+METoken $ npm init
+----
+
+You should now have the following directory structure:
+
+----
+METoken/
+├── contracts
+│   └── Migrations.sol
+├── migrations
+│   └── 1_initial_migration.js
+├── package.json
+├── test
+├── truffle-config.js
+└── truffle.js
+----
+
+Edit the +truffle.js+ configuration file to setup your +truffle+ environment, or copy the one we used from:
+
+https://github.com/ethereumbook/ethereumbook/blob/first_edition/code/Faucet/truffle.js
+
+If you use the example +truffle.js+, remember to create a file +.env+ in the +METoken+ folder containing your test private keys for testing and deployment on public Ethereum test networks, such as ganache or Kovan. You can export your test network private key from MetaMask.
+
+[WARNING]
+====
+Only use test keys or test mnemonics that are not used to hold funds on the main Ethereum network. Never use keys that hold real money for testing.
+====
+
+For our example, we will import the OpenZeppelin StandardContract, which implements some important security checks and is easy to extend. Let's import that library:
+
+----
+$ npm install zeppelin-solidity
+
++ zeppelin-solidity@1.6.0
+added 8 packages in 2.504s
+----
+
+The +zeppelin-solidity+ package will add about 250 files under the +node_modules+ directory. The OpenZeppelin library includes a lot more than the ERC20 token, but we will only use a small part of it.
+
+Next, let's write our token contract. Create a new file +METoken.sol+ and copy the example code from GitHub:
+
+https://github.com/ethereumbook/ethereumbook/blob/first_edition/code/METoken/contracts/METoken.sol
+
+Our contract is very simple, as it inherits all the functionality from the OpenZeppelin StandardToken library:
+
+[[solidity_token_example]]
+.METoken.sol : A Solidity contract implementing an ERC20 token
+[source,solidity,linenums]
+----
+include::code/METoken/contracts/METoken.sol[]
+----
+
+Here, we are defining the optional variables +name+, +symbol+, and +decimals+. We also define an +_initial_supply+ variable, set to 21 million tokens, and two decimals of subdivision (2.1 billion total). In the contract's initialization (constructor) function we set the +totalSupply+ to be equal to +_initial_supply+ and allocate all of the +_initial_supply+ to the balance of the account (+msg.sender+) that creates the +METoken+ contract.
+
+We now use +truffle+ to compile the +METoken+ code:
+
+----
+$ truffle compile
+Compiling ./contracts/METoken.sol...
+Compiling ./contracts/Migrations.sol...
+Compiling zeppelin-solidity/contracts/math/SafeMath.sol...
+Compiling zeppelin-solidity/contracts/token/ERC20/BasicToken.sol...
+Compiling zeppelin-solidity/contracts/token/ERC20/ERC20.sol...
+Compiling zeppelin-solidity/contracts/token/ERC20/ERC20Basic.sol...
+Compiling zeppelin-solidity/contracts/token/ERC20/StandardToken.sol...
+
+----
+
+As you can see, +truffle+ incorporated necessary dependencies from the OpenZeppelin libraries and compiled those contracts too.
+
+Let's set up a migration script, to deploy the +METoken+ contract. Create a new file +2_deploy_contracts.js+ in the +METoken/migrations+ folder. Copy the contents from the example on Github repository:
+
+https://github.com/ethereumbook/ethereumbook/blob/first_edition/code/METoken/migrations/2_deploy_contracts.js
+
+Here's what it contains:
+
+[[metoken_migration]]
+.2_deploy_contracts: Migration to deploy METoken
+[source,javascript,linenums]
+----
+include::code/METoken/migrations/2_deploy_contracts.js[]
+----
+
+Before we deploy on one of the Ethereum test networks, let's start a local blockchain to test everything. Start the +ganache+ blockchain, either from the command-line with +ganache-cli+ or from the graphical user interface, as we did in <<using_ganache>>.
+
+Once +ganache+ is started, we can deploy our METoken contract and see if everything works as expected:
+
+----
+$ truffle migrate --network ganache
+Using network 'ganache'.
+
+Running migration: 1_initial_migration.js
+  Deploying Migrations...
+  ... 0xb2e90a056dc6ad8e654683921fc613c796a03b89df6760ec1db1084ea4a084eb
+  Migrations: 0x8cdaf0cd259887258bc13a92c0a6da92698644c0
+Saving successful migration to network...
+  ... 0xd7bc86d31bee32fa3988f1c1eabce403a1b5d570340a3a9cdba53a472ee8c956
+Saving artifacts...
+Running migration: 2_deploy_contracts.js
+  Deploying METoken...
+  ... 0xbe9290d59678b412e60ed6aefedb17364f4ad2977cfb2076b9b8ad415c5dc9f0
+  METoken: 0x345ca3e014aaf5dca488057592ee47305d9b3e10
+Saving successful migration to network...
+  ... 0xf36163615f41ef7ed8f4a8f192149a0bf633fe1a2398ce001bf44c43dc7bdda0
+Saving artifacts...
+
+----
+
+On the +ganache+ console, we should see that our deployment has created 4 new transactions:
+
+[[ganache_metoken]]
+.METoken deployment on Ganache
+image::images/ganache_metoken.png["METoken deployment on Ganache"]
+
