@@ -1,0 +1,11 @@
+.env
+*.pdf
+*.orig
+.password
+.DS_Store
+snippets
+node_modules
+build
+.ipynb_checkpoints
+package.json
+package-lock.json

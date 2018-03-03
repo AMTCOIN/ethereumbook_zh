@@ -1,0 +1,54 @@
+{
+  "branch": "master",
+  "files": [
+    "titlepage.html",
+    "toc.html",
+    "copyright.html",
+    "preface.asciidoc",
+    "glossary.asciidoc",
+    "draft.asciidoc",
+    "ix.html",
+    "author_bio.html",
+    "colo.html"
+  ],
+  "formats": {
+    "pdf": {
+      "version": "web",
+      "toc": true,
+      "index": false,
+      "syntaxhighlighting": true,
+      "show_comments": false,
+      "antennahouse_version": "AHFormatterV62_64-MR4",
+      "color_count": "1",
+      "trim_size": "7inx9.1875in"
+    },
+    "epub": {
+      "toc": true,
+      "index": false,
+      "syntaxhighlighting": true,
+      "epubcheck": true,
+      "show_comments": false,
+      "downsample_images": true
+    },
+    "mobi": {
+      "toc": true,
+      "index": true,
+      "syntaxhighlighting": true,
+      "show_comments": false,
+      "downsample_images": false
+    },
+    "html": {
+      "toc": true,
+      "index": true,
+      "syntaxhighlighting": true,
+      "show_comments": false,
+      "consolidated": false
+    }
+  },
+  "theme": "https://github.com/oreillymedia/atlas_tech1c_theme.git",
+  "title": "Mastering Ethereum",
+  "templating": true,
+  "print_isbn13": "1491971940",
+  "lang": "en",
+  "accent_color": "cmyk(12%, 100%, 92%, 3%)"
+}

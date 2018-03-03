@@ -1,0 +1,474 @@
+= Development Tools, Frameworks and Libraries
+
+== Frameworks
+
+Frameworks can be used to ease development. By doing everything yourself you get a better understanding of how everything fits together, but it's a lot of tedious work and it's mostly doing the same over and over. These frameworks can automate some of these tasks and make development a breeze.
+
+=== Truffle
+
+Github link; https://github.com/trufflesuite/truffle
+
+Website link; https://truffleframework.com
+
+Documentation link; https://truffleframework.com/docs
+
++npm+ packages repository link; https://www.+npm+js.com/package/truffle
+
+
+[[installing_truffle]]
+==== Installing the truffle framework
+
+The truffle framework is made of several +NodeJS+ packages. Before we install +truffle+, we need to have an up-to-date and working installation of +NodeJS+ and the Node Package Manager (+npm+).
+
+The recommended way to install +NodeJS+ and +npm+, is to use the Node Version Manager, +nvm+. Once we install +nvm+, it will handle all the dependencies and updates for us. We'll follow the instructions found at:
+http://nvm.sh
+
+Once +nvm+ is installed on your operating system, installing +NodeJS+ is simple. We use the +--lts+ flag to tell nvm that we want the most recent "Long Term Support (LTS)" version of +NodeJS+
+
+----
+$ nvm install --lts
+----
+
+Confirm you have +node+ and +npm+ installed:
+
+----
+$ node -v
+v8.9.4
+$ npm -v
+5.6.0
+----
+
+Looking good. Now to install truffle:
+
+----
+$ npm -g install truffle
+
++ truffle@4.0.6
+installed 1 package in 37.508s
+----
+
+[[truffle_project_directory]]
+==== Creating a truffle project directory
+
+For each project where we will use truffle, we create a project directory and initialize truffle within that directory. Truffle will create the necessary directory structure inside our project directory. Customarily, we give the project directory a name that describes our project. For this example, we will use truffle to deploy our faucet contract from <<simple_contract_example>>, and therefore we will name the project folder +Faucet+.
+
+----
+$ mkdir faucet
+$ cd Faucet
+Faucet $
+----
+
+Once inside the +Faucet+ directory, we initialize truffle:
+
+----
+Faucet $ truffle init
+----
+
+Truffle creates a directory structure and some default files:
+
+----
+Faucet
+├── contracts
+│   └── Migrations.sol
+├── migrations
+│   └── 1_initial_migration.js
+├── test
+├── truffle-config.js
+└── truffle.js
+----
+
+We will also use a number of JavaScript (nodeJS) support packages, in addition to truffle itself. We can install these with npm. We initialize the npm directory structure and accept the defaults suggested by npm:
+
+----
+$ npm init
+
+package name: (faucet)
+version: (1.0.0)
+description:
+entry point: (truffle-config.js)
+test command:
+git repository:
+keywords:
+author:
+license: (ISC)
+About to write to Faucet/package.json:
+
+{
+  "name": "faucet",
+  "version": "1.0.0",
+  "description": "",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
+
+
+Is this ok? (yes)
+----
+
+Now, we can install the dependencies that we will use to make working with truffle easier:
+
+----
+$ npm install dotenv truffle-wallet-provider ethereumjs-wallet
+----
+
+You now have a +node_modules+ directory with several thousand files, inside your Faucet directory.
+
+==== Configuring truffle
+
+Truffle creates some empty configuration files, +truffle.js+ and +truffle-config.js+. There are two configuration files because on Windows systems, the +truffle.js+ name may cause a conflict when you try to run +truffle+ the command and Windows attempts to run +truffle.js+ instead. We will delete +truffle.js+ and use +truffle-config.js+, in support of Windows users who, after all, are suffering enough already.
+
+----
+$ rm truffle.js
+----
+
+Now we edit truffle-config.js and replace the contents with:
+
+[[truffle_config]]
+.truffle-config.js - a truffle configuration to get us started
+[source,javascript,linenums]
+----
+module.exports = {
+	networks: {
+		localnode: { // Whatever network our local node connects to
+			network_id: "*", // Match any network id
+			host: "localhost",
+			port: 8545,
+		}
+	}
+};
+----
+
+The configuration above is a good starting point. It sets up one default Ethereum network (named +localnode+), which assumes you are running an Ethereum client (such as parity), either as a full node, or as a light client. This configuration will instruct truffle to communicate with the local node over RPC, on port 8545. Truffle will use whatever Ethereum network the local node is connected to, such as the Ethereum main network, or a test network like Ropsten. The local node will also be providing the wallet functionality.
+
+In following sections, we will configure additional networks for truffle to use, such as the +ganache+ test-RPC blockchain and Infura, a hosted network provider. As we add more networks, the configuration file will get more complex, but it will also give us more options for our testing and development workflow.
+
+==== Using truffle to deploy a contract
+
+We now have a basic working directory for our +Faucet+ project, and we have truffle and its dependencies configured. Contracts go in the +contracts+ subdirectory of our project. The directory already contains a "helper" contract, +Migrations.sol+ which manages contract upgrades for us. We'll examine the use of +Migrations.sol+ in a later section.
+
+Let's copy the +Faucet.sol+ contract (from <<solidity_faucet_example>>) into the +contracts+ subdirectory, so that the project directory looks like this:
+
+----
+Faucet
+├── contracts
+│   ├── Faucet.sol
+│   └── Migrations.sol
+...
+----
+
+We can now ask truffle to compile the contract for us:
+
+----
+$ truffle compile
+Compiling ./contracts/Faucet.sol...
+Compiling ./contracts/Migrations.sol...
+Writing artifacts to ./build/contracts
+----
+
+==== Truffle migrations - understanding deployment scripts
+
+Truffle offers a deployment system called a _migration_. If you have worked in other frameworks, you may have seen something similar: Ruby on Rails, Python Django and many other languages and frameworks have a +migrate+ command.
+
+In all those frameworks, the purpose of a migration is to handle changes in the data schema between different versions of the software. The purpose of migrations in Ethereum is slightly different. Because Ethereum contracts are immutable and cost gas to deploy, truffle offers a migration mechanism to keep track of which contracts (and which versions) have already been deployed. In a complex project with dozens of contracts and complex dependencies, you would not want to have to pay to redeploy contracts that haven't changed. You would also not want to manually track which versions of which contracts have been deployed already. The truffle migration mechanism does all that by deploying the smart contract +Migrations.sol+, which then keeps track of all other contract deployments.
+
+We have only one contract, +Faucet.sol+, which means that the migration system is overkill, to say the least. Unfortunately, we have to use it. But, by learning how to use it for one contract, we can start practicing some good habits for our development workflow. The effort will pay off as things get more complicated.
+
+Truffle's +migrations+ directory is where the migration scripts are found. Right now, there's only one script +1_initial_migration.js+, which deploys the +Migrations.sol+ contract itself:
+
+[[1_initial_migration]]
+.1_initial_migration.js - the migration script for Migrations.sol
+[source,javascript,linenums]
+----
+include::code/Faucet/migrations/1_initial_migration.js
+----
+
+We need a second migration script, to deploy +Faucet.sol+. Let's call it +2_deploy_contracts.js+. It is very simple, just like +1_initial_migration.js+, with only a few small changes. In fact, you can copy the contents of +1_initial_migration.js+ and simply replace all instances of +Migrations+ with +Faucet+:
+
+[[2_deploy_contracts]]
+.2_deploy_contracts.js - the migration script for Faucet.sol
+[source,javascript,linenums]
+----
+include::code/Faucet/migrations/2_deploy_contracts.js
+----
+
+The script initializes a variable +Faucet+, identifying the +Faucet.sol+ Solidity source code as the artifact that defines +Faucet+. Then, it calls the deploy function to deploy this contract.
+
+We're all set. Let's use +truffle migrate+ to deploy the contract. We have to specify on which network to deploy the contract, using the +--network+ argument. We only have one network specified in the configuration file, which we named +localnode+. Make sure your local Ethereum client is running and then type:
+
+----
+Faucet $ truffle migrate --network localnode
+----
+
+Because we are using a local node to connect to the Ethereum network and manage our wallet, we have to authorize the transaction that truffle creates. I'm running +parity+ connected to the Ropsten test blockchain, so during the truffle migration I will see a pop-up on parity's web console:
+
+[[parity_deployment_confirmation]]
+.Parity asking for confirmation to deploy Faucet
+image::images/parity_deployment_confirmation.png["Parity asking for confirmation to deploy Faucet"]
+
+You will see four transactions, total. One to deploy +Migrations+, one to update the deployments counter to +1+, one to deploy +Faucet+ and one to update the deployments counter to +2+.
+
+Truffle will show the migrations completing, show each of the transactions and show the contract addresses:
+
+----
+$ truffle migrate --network localnode
+Using network 'localnode'.
+
+Running migration: 1_initial_migration.js
+  Deploying Migrations...
+  ... 0xfa090db179d023d2abae543b4a21a1479e70ca7d35a469a5d1a98bfc6bd80fe8
+  Migrations: 0x8861c27715550bed8362c0345add158489df6db0
+Saving successful migration to network...
+  ... 0x985c4a32716826ddbe4eae284104bef8bc69e959899f62246a1b27c9dfcd6c03
+Saving artifacts...
+Running migration: 2_deploy_contracts.js
+  Deploying Faucet...
+  ... 0xecdbeef77f0558edc689440e34b7bba0a3ba7a45e4b680b071b47c30a930e9d6
+  Faucet: 0xd01cd8e7bd29e4bff8c1693f59eee46137a9f300
+Saving successful migration to network...
+  ... 0x11f376bd7307edddfd40dc4a14c3f7cb84b6c921ac2465602060b67d08f9fd8a
+Saving artifacts...
+----
+
+==== Using the truffle console
+
+Truffle offers a JavaScript console that we can use to interact with the Ethereum network (via the local node), interact with deployed contracts, and interact with the wallet provider. In our current configuration (+localnode+), the node and wallet provider is our local parity client.
+
+Let's start the truffle console and try some commands:
+
+----
+$ truffle console --network localnode
+truffle(localnode)>
+----
+
+Truffle presents a prompt, showing the selected network configuration (+localnode+). It's important to remember and be aware of which network we are using. You wouldn't want to accidentally deploy a test contract or make a transaction on the Ethereum main network. That could be an expensive mistake!
+
+The truffle console offers an auto-complete function that makes it easy for us to explore the environment. If we press +Tab+ after a partially-completed command, truffle will complete the command for us. Pressing +Tab+ twice will show all possible completions if more than one command matches our input. In fact, if we press +Tab+ twice on an empty prompt, truffle lists all commands:
+
+----
+truffle(localnode)>
+Array Boolean Date Error EvalError Function Infinity JSON Math NaN Number Object RangeError ReferenceError RegExp String SyntaxError TypeError URIError decodeURI decodeURIComponent encodeURI encodeURIComponent eval isFinite isNaN parseFloat parseInt undefined
+
+ArrayBuffer Buffer DataView Faucet Float32Array Float64Array GLOBAL Int16Array Int32Array Int8Array Intl Map Migrations Promise Proxy Reflect Set StateManager Symbol Uint16Array Uint32Array Uint8Array Uint8ClampedArray WeakMap WeakSet WebAssembly XMLHttpRequest _ assert async_hooks buffer child_process clearImmediate clearInterval clearTimeout cluster console crypto dgram dns domain escape events fs global http http2 https module net os path perf_hooks process punycode querystring readline repl require root setImmediate setInterval setTimeout stream string_decoder tls tty unescape url util v8 vm web3 zlib
+
+__defineGetter__ __defineSetter__ __lookupGetter__ __lookupSetter__ __proto__ constructor hasOwnProperty isPrototypeOf propertyIsEnumerable toLocaleString toString valueOf
+----
+
+The vast majority of the wallet and node related functions are provided by the +web3+ object, which is an instance of the +web3.js+ library. The +web3+ object abstracts the RPC interface into our parity node. You will also notice two objects with familiar names: +Migrations+ and +Faucet+. Those represent the contracts we just deployed. We will use the truffle console to interact with a contract. First, let's check our wallet via the +web3+ object:
+
+----
+truffle(localnode)> web3.eth.accounts
+[ '0x9e713963a92c02317a681b9bb3065a8249de124f',
+  '0xdb5dc1a13e3a55cf3b4587cd8d1e5fdeb6738145' ]
+----
+
+Our parity client has two wallets, with some test-ETH on Ropsten. The +web3.eth.accounts+ attribute contains a list of all the accounts. We can check the balance of the first account, using the +getBalance+ function:
+
+----
+truffle(localnode)> web3.eth.getBalance(web3.eth.accounts[0]).toNumber()
+191198572800000000
+truffle(localnode)>
+----
+
+The +web3.js+ is a large JavaScript library that offers a comprehensive interface to the Ethereum system, via a provider such as a local client. We will examine +web3.js+ in more detail in <<web3js>>. Now let's try to interact with our contracts:
+
+----
+truffle(localnode)> Faucet.address
+'0xd01cd8e7bd29e4bff8c1693f59eee46137a9f300'
+truffle(localnode)> web3.eth.getBalance(Faucet.address).toNumber()
+0
+truffle(localnode)>
+----
+
+Next, we'll use +sendTransaction+ to send some test-ETH to fund the +Faucet+. Note the use of +web3.toWei+ to convert ether units for us. Typing eighteen zeros without making a mistake is both difficult and dangerous, so it's always better to use a unit converter for values. Here's how we send the transaction:
+
+----
+truffle(localnode)> web3.eth.sendTransaction({from:web3.eth.accounts[0], to:Faucet.address, value:web3.toWei(0.5, 'ether')});
+'0xf134c75b985dc0e0c27c2f0412251e0860eb530a5055e660f21e7483ab336808'
+----
+
+Switch to the web console on +parity+, where you will see a pop-up asking you to confirm this transaction. Wait a minute and once the transaction is mined, you will be able to see the balance of our +Faucet+ contract:
+
+----
+truffle(localnode)> web3.eth.getBalance(Faucet.address).toNumber()
+500000000000000000
+----
+
+Let's call the +withdraw+ function now, to withdraw some test-ETH from the Faucet:
+
+----
+truffle(localnode)> Faucet.deployed().then(instance => {instance.withdraw(web3.toWei(0.1, 'ether'))}).then(console.log)
+----
+
+Again, you will need to approve the transaction in the parity web console. The balance of the +Faucet+ has decreased, and our test wallet has received +0.1+ ether:
+
+----
+truffle(localnode)> web3.eth.getBalance(Faucet.address).toNumber()
+400000000000000000
+----
+
+
+----
+truffle(localnode)> Faucet.deployed().then(instance => {instance.withdraw(web3.toWei(1, 'ether'))})
+----
+
+----
+StatusError: Transaction: 0xe147ae9e3610334ada8d863c9028c12bd0501be2d0cfd05865c18612b92d3f9c exited with an error (status 0).
+----
+
+=== Ganache: A personal blockchain for Ethereum development
+
+You can use Ganache to deploy contracts, develop your applications, and run tests. It is available as a desktop application for Windows, Mac, and Linux.
+
+Website: http://truffleframework.com/ganache
+
+=== Ganache CLI: Ganache as a command-line tool
+
+This tool was previously known under the name "ethereumJS TestRPC".
+
+https://github.com/trufflesuite/ganache-cli/
+
+----
+$ npm install -g ganache-cli
+----
+
+
+=== Embark
+
+Github link; https://github.com/iurimatias/embark-framework
+
+Read the docs link; https://embark.readthedocs.io/en/2.6.4/
+
++npm+ packages repository link; https://www.+npm+js.com/package/embark
+
+----
+$ npm -g install embark
+----
+
+=== OpenZeppelin
+
+Github link; https://github.com/OpenZeppelin
+
+Website link; https://openzeppelin.org/
+
+Read the docs link; http://zeppelin-solidity.readthedocs.io/en/latest/index.html
+
+=== Dapple (?)
+
+== Utilities
+
+
+=== ethereumJS helpeth: A command line utility
+
+helpeth is a command line tool for key and transaction manipulation that makes a developer's job a lot easier.
+
+It is part of the ethereumjs collection of JavaScript based libraries and tools.
+
+https://github.com/ethereumjs/helpeth
+
+----
+Usage: helpeth [command]
+
+Commands:
+  signMessage <message>                     Sign a message
+  verifySig <hash> <sig>                    Verify signature
+  verifySigParams <hash> <r> <s> <v>        Verify signature parameters
+  createTx <nonce> <to> <value> <data>      Sign a transaction
+  <gasLimit> <gasPrice>
+  assembleTx <nonce> <to> <value> <data>    Assemble a transaction from its
+  <gasLimit> <gasPrice> <v> <r> <s>         components
+  parseTx <tx>                              Parse raw transaction
+  keyGenerate [format] [icapdirect]         Generate new key
+  keyConvert                                Convert a key to V3 keystore format
+  keyDetails                                Print key details
+  bip32Details <path>                       Print key details for a given path
+  addressDetails <address>                  Print details about an address
+  unitConvert <value> <from> <to>           Convert between Ethereum units
+
+Options:
+  -p, --private      Private key as a hex string                        [string]
+  --password         Password for the private key                       [string]
+  --password-prompt  Prompt for the private key password               [boolean]
+  -k, --keyfile      Encoded key file                                   [string]
+  --show-private     Show private key details                          [boolean]
+  --mnemonic         Mnemonic for HD key derivation                     [string]
+  --version          Show version number                               [boolean]
+  --help             Show help                                         [boolean]
+----
+
+=== dapp.tools
+
+https://dapp.tools/
+
+Installing:
+----
+$ curl https://nixos.org/nix/install | sh
+$ nix-channel --add https://nix.dapphub.com/pkgs/dapphub
+$ nix-channel --update
+$ nix-env -iA dapphub.{dapp,seth,hevm,evmdis}
+----
+
+==== Dapp
+https://dapp.tools/dapp/
+
+==== Seth
+https://dapp.tools/seth/
+
+==== Hevm
+https://dapp.tools/hevm/
+
+== Libraries
+
+=== web3js
+
+web3js is the Ethereum compatible JS API for communicating with clients via JSON RPC, developed by the Ethereum foundation.
+
+Github link; https://github.com/ethereum/web3.js
+
++npm+ link; https://www.+npm+js.com/package/web3
+
+Documentation link; https://github.com/ethereum/wiki/wiki/JavaScript-API
+
+=== web3.py
+
+web3.py is a Python library for interacting with the Ethereum blockchain. It now lives in the Ethereum Foundation's GitHub too.
+
+Github link; https://github.com/ethereum/web3.py
+
+PyPi link; https://pypi.python.org/pypi/web3/4.0.0b9
+
+Documentation link; https://web3py.readthedocs.io/
+
+=== EthereumJS
+
+a collection of libraries and utilities for Ethereum.
+
+Github link; https://github.com/ethereumjs
+
+Website link; https://ethereumjs.github.io/
+
+=== web3j
+
+web3j is the Java and Android library for integrating with Ethereum clients and working with smart contracts.
+
+Github link; https://github.com/web3j/web3j
+
+Website link; https://web3j.io
+
+Documentation link; https://docs.web3j.io
+
+=== Nethereum
+
+Nethereum is the .Net integration library for Ethereum.
+
+Github link; https://github.com/Nethereum/Nethereum
+
+Website link; http://nethereum.com/
+
+Documentation link; https://nethereum.readthedocs.io/en/latest/
