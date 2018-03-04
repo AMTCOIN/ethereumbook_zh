@@ -334,16 +334,16 @@ On the +ganache+ console, we should see that our deployment has created 4 new tr
 .METoken deployment on Ganache
 image::images/ganache_metoken.png["METoken deployment on Ganache"]
 
-==== Interacting with METoken using the truffle console
+====使用truffle console与METoken进行交互
 
-We can interact with our contract on the +ganache+ blockchain, using the +truffle console+. This is an interactive JavaScript environment that provides access to the truffle environment and, via Web3, to the blockchain. In this case, we will connect the +truffle console+ to the +ganache+ blockchain:
+我们可以使用truffle console与ganache区块链的合约进行交互。这是一个交互式的JavaScript环境，它提供了对truffle环境的访问，并通过Web3向区块链提供了访问。在这种情况下，我们将truffle console连接到ganache区块链:
 
 ----
 $ truffle console --network ganache
 truffle(ganache)>
 ----
 
-The +truffle(ganache)>+ prompt shows that we are connected to the +ganache+ blockchain and are ready to type our commands. The +truffle console+ supports all the truffle commands, so we could +compile+ and +migrate+ from the console. We've already ran those commands, so let's go directly to the contract itself. The METoken contract exists as a JavaScript object within the truffle environment. Type +METoken+ at the prompt and it will dump the entire contract definition:
+truffle(ganache)>表示我们已经连接到ganache区块链，并准备好输入命令。truffle console支持所有的truffle命令，因此我们可以从console中进行编译(compile)和迁移(migrate)。我们已经运行了这些命令，直接进入合约。在truffle环境中，METoken合约作为一个JavaScript对象存在。在提示符处输入METoken，它将转储整个合约的定义:
 
 ----
 truffle(ganache)> METoken
@@ -366,21 +366,21 @@ network_id: '5777' }
 
 ----
 
-The +METoken+ object also exposes several attributes, such as the address of the contract (as deployed by the +migrate+ command):
+METoken还公开了几个属性，例如合约的地址（由转移命令(migrate)部署）：
 
 ----
 truffle(ganache)> METoken.address
 '0x345ca3e014aaf5dca488057592ee47305d9b3e10'
 ----
 
-If we want to interact with the deployed contract, we have to use an asynchronous call, in the form of a JavaScript "promise". We use the +deployed+ function to get the contract instance and then call the +totalSupply+ function:
+如果我们想要与已部署的合约进行交互，必须用JavaScript语言“promise”的形式进行异步调用。 我们用deployed函数来获取合约实例，然后调用totalSupply函数：
 
 ----
 truffle(ganache)> METoken.deployed().then(instance => instance.totalSupply())
 BigNumber { s: 1, e: 9, c: [ 2100000000 ] }
 ----
 
-Next, let's use the accounts created by +ganache+ to check our METoken balance and send some METoken to another address. First, let's get the account addresses:
+接下来，让我们使用由ganache创建的账户来检查我们的METoken余额并将一些METoken发送到另一个地址。 首先，让我们获取帐户地址：
 
 ----
 truffle(ganache)> let accounts
@@ -392,7 +392,7 @@ truffle(ganache)> accounts[0]
 
 ----
 
-The +accounts+ list now contains all the accounts created by +ganache+, and +account[0]+ is the account that deployed the METoken contract. It should have a balance of METoken, because our METoken constructor gives the entire token supply to the address that created it. Let's check:
+帐户列表现在包含由ganache创建的所有帐户，以及账户[0]是部署了该METoken合约的帐户。 它应该有一个METoken的balance，因为METoken构造函数将整个令牌提供给创建它的地址。 让我们核对：
 
 ----
 truffle(ganache)> METoken.deployed().then(instance => { instance.balanceOf(accounts[0]).then(console.log) })
@@ -400,7 +400,7 @@ undefined
 BigNumber { s: 1, e: 9, c: [ 2100000000 ] }
 ----
 
-Finally, let's transfer 1000.00 METoken from +account[0]+ to +account[1]+, by calling the contract's +transfer+ function:
+最后，让我们调用合约的传递函数，将1000.00 METoken从帐户[0]转移到帐户[1]：
 
 ----
 truffle(ganache)> METoken.deployed().then(instance => { instance.transfer(accounts[1], 100000) })
@@ -418,23 +418,23 @@ truffle(ganache)> BigNumber { s: 1, e: 5, c: [ 100000 ] }
 
 [TIP]
 ====
-METoken has 2 decimals of precision, meaning that 1 METoken is 100 units in the contract. When we transfer 1000 METoken, we specify the value as 100,000 in the transfer function.
+METoken具有2位精度的小数，这意味着1个METoken在合约中是100个单位。 当我们转移1000个METoken时，我们在传递函数中将该值指定为100,000。
 ====
 
-As you can see, in the console, +account[0]+ now has 20,999,000 MET, and +account[1]+ has 1000 MET.
+正如你所见，在console中，帐户[0]现在拥有20,999,000 MET，帐户[1]拥有1000 MET。
 
-If you switch to the +ganache+ graphical user interface, you will see the transaction that called the +transfer+ function:
+如果你切换到ganache图形用户界面，您将看到称为传递函数（transfer function）的记录：
 
 [[ganache_metoken_transfer]]
 .METoken transfer on Ganache
-image::images/ganache_metoken_transfer.png["METoken transfer on Ganache"]
+image::images/ganache_metoken_transfer.png["METoken在Ganache中的传递"]
 
 
-==== Sending ERC20 tokens to contract addresses
+====发送ERC20代币到合约地址
 
-So far we've setup an ERC20 token and transferred from one account to another. All the accounts we used for these demonstrations are externally-owned accounts (EOAs), meaning they are controlled by a private key, not a contract. What happens if we send MET to a contract address? Let's find out!
+到目前为止，我们已经设置了ERC20令牌并从一个帐户转移到另一个帐户。 我们用于这些示范的所有账户都是外部拥有账户（EOAs），这意味着它们由私钥控制，而不是合约。 如果我们将MET发送到合约地址会发生什么？ 让我们一起发现！
 
-First, let's deploy another contract into our test environment. For this example we will use our first contract +Faucet.sol+. Let's add it to the METoken project by copying it to the +contracts+ directory. Our directory should look like this:
+首先，我们将其他合约部署到我们的测试环境中。 对于这个例子，我们将使用我们的第一份合约Faucet.sol。 我们将它添加到METoken项目中，方法是将其复制到合约目录中。 我们的目录应该是这样的：
 
 ----
 METoken/
@@ -444,7 +444,7 @@ METoken/
 │   └── Migrations.sol
 ----
 
-We'll also add a migration, to deploy +Faucet+ separately from +METoken+:
+我们也添加了一个migration, 以便将Faucet和METoken分离：
 
 ----
 var Faucet = artifacts.require("Faucet");
@@ -455,7 +455,7 @@ module.exports = function(deployer) {
 };
 ----
 
-Let's compile and migrate the contracts, from the truffle console:
+让我们在truffle console中编译(compile)和传递(migrate)合约。
 
 ----
 $ truffle console --network ganache
@@ -483,7 +483,7 @@ Running migration: 3_deploy_faucet.js
 Saving artifacts...
 ----
 
-Great. Now let's send some MET to the +Faucet+ contract:
+太棒了！现在让我们发送一些MET到Faucet合约吧：
 
 ----
 truffle(ganache)> METoken.deployed().then(instance => { instance.transfer(Faucet.address, 100000) })
@@ -491,24 +491,24 @@ truffle(ganache)> METoken.deployed().then(instance => { instance.balanceOf(Fauce
 truffle(ganache)> BigNumber { s: 1, e: 5, c: [ 100000 ] }
 ----
 
-Alright, we have transferred 1000 MET to the +Faucet+ contract. Now, how do we withdraw from the +Faucet+?
+好了，我们已经把1000个MET转移到Faucet合约上了。现在，我们怎么从Faucet上提取这些MET呢？
 
-Remember, +Faucet.sol+ is a pretty simple contract. It only has one function, +withdraw+, which is for withdrawing _ether_. It doesn't have a function for withdrawing MET, or any other ERC20 token. If we use +withdraw+ it will try to send ether, but since the faucet doesn't have a balance of ether yet, it will fail.
-The +METoken+ contract knows that +Faucet+ has a balance, but the only way that it can transfer that balance is if it receives a +transfer+ call from the address of the contract. Somehow we need to make the +Faucet+ contract call the +transfer+ function in +METoken+.
+请牢记，Faucet.sol是一个非常简单的合约。它只有一个功能，那就是提取以太（ether）。它并没有一个提取MET或者其他任何ERC20 代币的功能。如果我们让它行使提取（非以太）的动作，它会尝试发送以太，但由于faucet不会达到以太的平衡，这个动作将会失败。
+ METoken合约确知Faucet有余额，但它唯一能转移余额的方式是接收到来自合约地址的转账命令。 不管怎样，我们需要让Faucet合约调用METoken的传递函数。
 
-If you're wondering what to do next, don't. There is no solution to this problem. The MET sent to +Faucet+ is stuck, forever. Only the +Faucet+ contract can transfer it, and the +Faucet+ contract doesn't have code to call the +transfer+ function of an ERC20 token contract.
+如果你想知道下一步该做什么的话，就别想了。 这个问题没有解决办法。 发送到Faucet的MET卡住了，永久的。 只有Faucet合约才能转移它，Faucet合约没有代码来调用ERC20代币合约的传递函数。
 
-Perhaps you anticipated this problem. Most likely, you didn't. In fact, neither did hundreds of Ethereum users who accidentally transferred various tokens to contracts that didn't have any ERC20 capability. According to some estimates, tokens worth more than $2.5 million USD have been "stuck" like this and are lost forever.
+也许你预料到了这个问题， 但很大可能是你并没有。 实际上，数百名以太坊用户也无意将各种代币转移到没有任何ERC20能力的合约上。 据估计，价值超过250万美元的代币像这样被“卡住”，并且永远丢失。
 
-One of the ways that users of ERC20 tokens can inadvertently lose their tokens in a transfer, is when they attempt to transfer to an exchange or other service. They copy an Ethereum address from the website of an exchange, thinking they can simply send tokens to it. However, many exchanges publish receiving addresses that are actually contracts! These contracts serve a number of different functions, most often sweeping all funds sent to them to a "cold storage" or other centralized wallet. Despite the many warnings saying "do not send tokens to this address", lots of tokens are lost this way.
+ERC20代币的用户在转移代币时无意中丢失代币的方式之一是他们尝试转移到具有交易或其他服务的地方。 他们从交易所网站复制了以太坊地址，认为只需发送代币即可。 但是，许多交易所实际上公布的都是合约的收货地址！ 这些合约具有许多不同的功能，通常将所有发送给他们的资金都清扫到“冷库”或其他集中的钱包。 尽管有许多警告说“不要将代币发送到这个地址”，但依然有许多代币以这种方式丢失。
 
-==== Demonstrating the approve & transferFrom workflow
+==== 演示批准（approve）和转让（transferForm）的工作流程
 
-Our +Faucet+ contract couldn't handle ERC20 tokens. Sending tokens to it, using the +transfer+ function results in the loss of those tokens. Let's rewrite the contract and make it handle ERC20 tokens. Specifically we will turn it into a faucet that gives out MET to anyone who asks.
+我们的Faucet合约无法处理ERC20代币，使用传递函数向它发送代币会导致这些代币丢失。 我们重写合约，并让它能处理ERC20代币。 具体而言，我们将把它变成一个可以把MET发给任何访问者的faucet。
 
-For this example, we make a copy of the truffle project directory, call it +METoken_METFaucet+, initialize truffle, npm, install OpenZeppelin dependencies and copy the +METoken.sol+ contract. See our first example <<metoken_example>> for the detailed instructions.
+在这个例子中，我们制作了一个truffle程序目录的副本，称之为METoken_METFaucet，初始化 truffle，npm，安装OpenZeppelin相关项并复制METoken.sol合约。 请参阅我们的第一个示例 Launching our own ERC20 token，已有详细说明。
 
-Now, let's create a new faucet contract, call it +METFaucet.sol+. It will look like this:
+现在，让我们创建一个新的faucet合约，称之为METFaucet.sol.看起来像这样：METFaucet.sol: 一份为了METoken的faucet合约。
 
 [[METFaucet]]
 .METFaucet.sol: a faucet for METoken
@@ -517,15 +517,15 @@ Now, let's create a new faucet contract, call it +METFaucet.sol+. It will look l
 include::code/METoken_METFaucet/contracts/METFaucet.sol
 ----
 
-We've made quite a few changes to the basic faucet example. Since METFaucet will use the +transferFrom+ function in +METoken+, it will need two additional variables. One will hold the address of the deployed +METoken+ contract. The other will hold the address of the owner of MET who will provide approval the faucet withdrawals. The +METFaucet+ will call +METoken.transferFrom+ and instruct it to move MET from the owner to the address where the faucet withdrawal request came from.
+我们对基本的faucet样本做了一些改变。 由于METFaucet将使用METoken中的transferFrom函数，因此它需要两个额外的变量。 一个将保存已部署METoken合约的地址。 另一个将保存允许faucet提款的MET所有者的地址。 METFaucet将调用METoken.transferFrom并指示它将MET从所有者处移至faucet中收到提取请求的地址。
 
-We declare these two variables here:
+我们在这里声明这两个变量：
 ----
 StandardToken public METoken;
 address public METOwner;
 ----
 
-Since our faucet needs to be initialized with the correct addesses for +METoken+ and +METOwner+ we need to declare a custom constructor:
+由于faucet需要使用METoken和METOwner的正确地址进行初始化，因此我们需要声明一个自定义构造函数：
 
 ----
 // METFaucet constructor, provide the address of METoken contract and
@@ -538,21 +538,21 @@ function METFaucet(address _METoken, address _METOwner) public {
 }
 ----
 
-The next change is to the +withdraw+ function. Instead of calling +transfer+, +METFaucet+ uses the +transferFrom+ function in +METoken+ and asks +METoken+ to transfer MET to the faucet recipient:
+下一个改变是提取功能。 METFaucet使用METoken中的transferFrom函数而不是调用传递函数，并要求METoken将MET传递给faucet接收人：
 
 ----
 // Use the transferFrom function of METoken
 METoken.transferFrom(METOwner, msg.sender, withdraw_amount);
 ----
 
-Finally, since our faucet no longer sends ether, we should probably prevent anyone from sending ether to +METFaucet+, as we wouldn't want it to get stuck. We change the fallback payable function to reject incoming ether, using the +revert+ function to revert any incoming payments:
+最后，由于faucet不再发送以太，所以我们应该可以防止任何人将以太发送到METFaucet，因为我们不希望它卡住。 我们更改回退应付功能以拒绝传入的以太网，并使用回复功能来还原所有收款：
 
 ----
 // REJECT any incoming ether
 function () public payable { revert(); }
 ----
 
-Now that our +METFaucet.sol+ code is ready, we need to modify the migration script to deploy it. This migration script will be a bit more complex, as +METFaucet+ depends on the address of +METoken+. We will use a JavaScript promise to deploy the two contracts in sequence. Create +2_deply_contracts.js+ as follows:
+现在METFaucet.sol代码已准备就绪，我们需要修改迁移脚本来部署它。 这个迁移脚本会更复杂一点，因为METFaucet依赖于METoken的地址。 我们将使用JavaScript承诺按顺序部署这两个合约。 创建2_deply_contracts.js，如下所示：
 
 ----
 var METoken = artifacts.require("METoken");
@@ -570,8 +570,7 @@ module.exports = function(deployer) {
 }
 ----
 
-Now, we can test everything in the truffle console. First, we use +migrate+ to deploy the contracts. When +METoken+ is deployed it will allocate all the MET to the account that created it, +web3.eth.accounts[0]+. Then, we call the +approve+ function in METoken to approve +METFaucet+ to send up to 1000 MET on behalf of +web3.eth.accounts[0]+. Finally, to test our faucet, we call +METFaucet.withdraw+ from +web3.eth.accounts[1]+ and try to withdraw 10 MET. Here are the console commands:
-
+现在，我们可以测试truffle console中的所有内容。 首先，使用迁移函数来部署合约。 当METoken被部署时，它会将所有MET分配给创建它的帐户，web3.eth.accounts [0]。 然后，在METoken中调用批准函数来批准METFaucet发送高达1000 的MET，用web3.eth.accounts [0]表示。 最后，为了测试faucet，我们调用web3.eth.accounts [1]中的METFaucet.withdraw并尝试提取10 MET。 以下是控制台命令：
 
 ----
 $ truffle console --network ganache
@@ -599,9 +598,9 @@ truffle(ganache)> METoken.deployed().then(instance => { instance.balanceOf(web3.
 truffle(ganache)> BigNumber { s: 1, e: 3, c: [ 1000 ] }
 ----
 
-As you can see from the results, we can use the +approve+ and +transferFrom+ workflow to authorize one contract to transfer tokens defined in another token. If properly used, ERC20 tokens can be used by externally-owned addresses and other contracts.
+正如从结果所见，我们可以使用批准和转让工作流程来授权一个合约转移另一个代币中中定义的代币。 如果使用得当，ERC20代币可以由外部拥有的地址和其他合约使用。
 
-However, the burden of managing ERC20 tokens correctly is pushed to the user interface. If a user incorrectly attempts to transfer ERC20 tokens to a contract address and that contract is not equipped to receive ERC20 tokens, the tokens will be lost.
+然而这样正确管理ERC20代币的负担会推送到用户界面。 如果用户错误地尝试将ERC20代币转移到合约地址，并且该合约不能接收ERC20代币，则代币将丢失。
 
 ==== Issues with ERC20 tokens
 
