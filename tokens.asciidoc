@@ -606,17 +606,31 @@ truffle(ganache)> BigNumber { s: 1, e: 3, c: [ 1000 ] }
 
 The adoption of the ERC20 token standard has been truly explosive. Thousands of tokens have been launched, both to experiment with new capabilities and to raise funds in various "crowdfund" auctions and Initial Coin Offerings (ICOs). However there are some potential pitfalls, as we saw with the issue of transferring tokens to contract addresses.
 
+ERC20 代币标准已经被极其广泛地采用。成千上万的代币发行即是为了实验新的特性也是为了通过众筹拍卖或 ICO 来融资。不过，正如我们看到，采用 ERC20 代币在将代币转移到合约地址时会有一些问题。
+
 One of the less obvious issues with ERC20 tokens is that they expose subtle differences between tokens and ether itself. Where ether is transferred by a transaction which has a recipient address as its destination, token transfers occur within the _specific token contract state_ and have the token contract as their destination, not the recipient's address. The token contract tracks balances, and issues events. In a token transfer, no transaction is actually sent to the recipient of the token. Instead, the recipients address is added to a map within the token contract itself. A transaction sending ether to an address, changes the state of an address. A transaction transferring a token to an address, only changes the state of the token contract, not the state of the recipient address. Even a wallet that has support for ERC20 tokens does not become aware of a token balance, unless the user explicitly adds a specific token contract to "watch". Some wallets watch the most popular token contracts to detect balances held by addresses they control, but that's limited to a small fraction of the available ERC20 contracts.
+
+其中一个不太明显的问题是 ERC20 代币和以太(ether)本身是有细微差别的。以太的转移是靠一笔有收款人地址的交易(transaction)来完成，而代币的转移是在某个具体的代币合约里完成，其接收者是这个代币合约而不是一个收款人地址。代币合约会跟踪余额以及发布事件。在一次代币转移中，实际上没有一笔真正的交易发到代币的接收者那里，而是把收款人地址加到了代币合约中。一笔通常意义上发送以太到某个地址的交易是在改变那个地址的状态。一笔转移代币到某个地址的交易只更改了合约的状态而没有改变收款人地址的状态。即便是一个支持 ERC20 代币的钱包也不会变得能够知道代币余额，除非用户特地添加了个监控代币余额的合约。有些钱包会监听最热门的合约来获取用户所掌握的代币余额信息，但是这仅限于非常小部分的 ERC20 合约。
 
 In fact, it's unlikely that a user would _want_ to track all balances in all possible ERC20 token contracts. Many ERC20 tokens are more like email spam than usable tokens. They automatically create balances for accounts that have ether activity, to attract users. If you have an Ethereum address with a long history of activity, especially if it was created in the presale, you will find it full of "junk" tokens that appeared out of nowhere. Of course, the address isn't really full of tokens, it's the token contracts that have your address in them. You only see these balances if these tokens contracts are being watched by the block explorer or wallet you use to view your address.
 
+事实上，一个用户不太可能会想监听所有的代币合约里的代币余额。很多 ERC20 代币更像是垃圾邮件而不是有价值的代币。这些代币会为了吸引用户，自动为有以太活动的账户创建余额。如果你拥有一个有长期活动历史的以太坊地址，特别是如果这个地址是在预售期被创建的，你会发现这里面充满了不知道从哪冒出来的『垃圾』代币。当然，这些地址里不是真正地充满了代币，而是那些代币合约里有你的这些地址。你只有当你用区块链浏览器或者钱包去监听这些合约里你的地址时才会看到这些余额。
+
 Tokens don't behave the same way as ether. Ether is sent with the +send+ function and accepted by any payable function in a contract or any externally owned address. Tokens are sent using +transfer+ or +approve & transferFrom+ functions that exist only in the ERC20 contract, and do not (at least in ERC20) trigger any payable functions in a recipient contract. Tokens are meant to function just like a cryptocurrency such as ether, but they come with certain subtle distinctions that break that illusion.
+
+代币和以太的具体表现是不一样的。以太是通过发送函数(send function)进行发送并且可以被任意合约里的应付函数(payable function)或任意外部拥有账户(EOA)所接收。代币是通过只存在鱼 ERC20 合约里的 transfer 或者 approve & transferFrom 函数进行发送，并且至少在 ERC20 中并不会触发任何接收人合约的应付函数。代币的职能本来是应该和以太这样的加密货币一样，但是他们本身和以太一些细微的不同打破了这样的幻想。
 
 Consider another issue. To send ether, or use any Ethereum contract you need ether to pay gas. To send tokens, you _also need ether_. You cannot pay for a transaction's gas with a token and the token contract can't pay the gas for you. This can cause some rather strange user experiences. For example, let's say you use an exchange or Shapeshift to convert some bitcoin to a token. You "receive" the token in a wallet that tracks that token's contract and shows your balance. It looks the same as any of the other cryptocurrencies you have in your wallet. Now try sending the token and your wallet will inform you that you need ether to do that. You might be confused - after all you didn't need ether to receive the token. Perhaps you have no ether. Perhaps you didn't even know the token was an ERC20 token on Ethereum, maybe you thought it was a cryptocurrency with its own blockchain. The illusion just broke.
 
+现在我们来看另一个问题。想要给别人转以太或者使用以太坊合约，你需要以太来支付相应的交易工作量(gas)。想要给别人转代币，你同样需要以太。你无法用代币来支付一笔交易所需的计算工作量，你的代币合约也同样无法为你支付所需的计算工作量。这就会导致一些非常奇怪的用户体验。打比方说你用某个交易所把一些比特币换成了某种代币。你『接收』到了这些代币并且用钱包监听了这个代币的合约以显示你的余额。这跟你在钱包里拥有的其他加密货币看起没有什么不同。但是如果你现在想要把这些代币转出去，你的钱包就会提醒你说你需要有以太才能转账。你可能会觉得非常奇怪，毕竟你接收这些代币的时候都没有需要用到以太。你可能没有以太。你可能根本就不知道这个代币是基于以太坊 ERC20 的一种代币，你可能还觉得它是一种拥有自己区块链的加密货币。不管怎样，这样的臆想在你转不出去账的时候破灭了。
+
 Some of these issues are specific to ERC20 tokens. Others are more general issues that relate to abstraction and interface boundaries within Ethereum. Some can be solved by changing the token interface, others may need changes to fundamental structures within Ethereum (such as the distinction between EOAs and contracts, and between transactions and messages). Some may not be "solvable" exactly and may require user interface design to hide the nuances and make the user experience consistent regardless of the underlying distinctions.
 
+有些问题是针对于 ERC20 代币的，而其他的是更宽泛的、跟以太坊抽象和接口边界有关的问题。有些问题能通过修改代币接口解决，有的可能需要改变以太坊的基础架构（比如外部拥有账户(EOA)和合约(contract)之间的差异，交易(transaction)和消息(message)之间的差异）。有些差异可能并不能被消除，它们需要通过一些用户界面的隐藏使得用户感知不到内部的细微差异。
+
 In the next sections we will look at various proposals that attempt to address some of these issues.
+
+在下面一个章节我们将会介绍一些想要解决以上部分问题的提案。
 
 ==== ERC223 - a proposed token contract interface standard
 
