@@ -127,8 +127,18 @@ First, let's start by clarifying the role of a token in a new project. The major
 
 Utility tokens are those where use of the token is required to pay for use of a service, application or resource. Examples of utility tokens include tokens that represent resources such as shared storage, access to services such as social media networks, or ether itself as gas for the Ethereum platform. By comparison, equity tokens are those that represent shares in a startup.
 
-实用令牌指被用来支付服务费用，应用程序或资源的令牌。公用令牌的例子包括代表资源的令牌，如共享存储，或者访问社交媒体网络等服务，或将自己作为以太坊平台的GAS。 相比之下，股权令牌指代表创业公司股票的令牌。
+应用令牌指被用来支付服务费用，应用程序或资源的令牌。应用令牌的例子包括代表资源的令牌，如共享存储，或者访问社交媒体网络等服务，或将自己作为以太坊平台的GAS。 相比之下，股权令牌指代表创业公司股票的令牌。
 
 Equity tokens can be as limited as non-voting shares for distribution of dividends and profits, or as expansive as voting shares in a decentralized-autonomous-organization, where management of the platform is through majority votes by the token holders.
 
 股权令牌与股票和利润分配的无投票权股份一样是数量有限的，也可以像分布式自治组织中的投票股一样广泛，平台的管理是通过令牌持有者的大多数投票来决定的。
+
+==== It's not a duck
+
+Just because a token is used to fundraise for a startup, doesn't mean it has to be used as payment for the service, and vice-versa. Many startups, however face a difficult problem: tokens are a great fundraising mechanism, but offering securities (equity) to the public is a regulated activity in most jurisdictions. By disguising equity tokens as utility tokens, many startups hope to get around these regulatory restrictions and raise money from a public offering while presenting it as a pre-sale of a utility token. Whether these thinly disguised equity offerings will be able to skirt the regulators remains to be seen.
+
+仅仅因为令牌用于为初创公司筹款，并不意味着它必须用作服务的支付，反之亦然。 然而，许多创业公司面临一个棘手的问题：令牌是一个很好的筹资机制，但向大众提供证券（股票）在大多数国家和地区都是受监管的活动。通过将股权令牌伪装成应用令牌，许多创业公司希望能够绕过这些监管限制，并从预售应用令牌中公开募股筹集资金。这些被变相伪装的股权产品是否能够摆脱监管机构仍有待观察。
+
+As the popular saying goes: "If it walks like a duck and quacks like a duck - it's a duck". Regulators are not likely to be distracted by these semantic contortions, quite the opposite, they are more likely to see such legal sophistry as an attempt to deceive the public.
+
+正如谚语所说：“如果它像鸭子一样走路，像鸭子一样嘎嘎叫 - 它就是一只鸭子。” 监管机构不会因这些语义游戏而转移注意力，恰恰相反，他们更有可能将这种法律诡辩看作是企图欺骗公众。
