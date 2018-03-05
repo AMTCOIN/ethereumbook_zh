@@ -142,3 +142,35 @@ Just because a token is used to fundraise for a startup, doesn't mean it has to 
 As the popular saying goes: "If it walks like a duck and quacks like a duck - it's a duck". Regulators are not likely to be distracted by these semantic contortions, quite the opposite, they are more likely to see such legal sophistry as an attempt to deceive the public.
 
 正如谚语所说：“如果它像鸭子一样走路，像鸭子一样嘎嘎叫 - 它就是一只鸭子。” 监管机构不会因这些语义游戏而转移注意力，恰恰相反，他们更有可能将这种法律诡辩看作是企图欺骗公众。
+
+==== Utility tokens: who needs them?
+
+==== 应用令牌：谁需要它们？
+
+The real problem however is that utility tokens introduce significant risks and adoption barriers for startups. Perhaps in a distant future "tokenize all the things" becomes a reality. But, at present, the number of people who have access to, understanding, and desire to use a token is a subset of the already small cryptocurrency market.
+
+然而，真正的问题在于，应用型令牌为创业公司带来了重大风险和采用障碍。 也许在不久的将来，“所有事物令牌化”将成为现实。但是，目前来看，能够掌握，理解，并愿意使用令牌的人数仅仅只是规模已经非常小的加密货币市场中的一小部分人。
+
+For a startup, each innovation represents a risk and a market filter. Innovation is taking the road least traveled, walking away from the path of tradition. It is already a lonely walk. If a startup is trying to innovate in a new area of technology, such as storage sharing over P2P networks, that is a lonely enough path. Adding a utility token to that innovation and requiring users to adopt tokens in order to use the service compounds the risk and increases the barriers to adoption. It's walking off the already lonely trail of P2P storage innovation and into the wilderness.
+
+对于创业公司而言，每项创新都代表风险和市场过滤器。创新就是探索前人没走过的道路，走出与传统迥异的道路。它注定是一段孤独的旅程。如果一家初创公司试图在一个新的技术领域进行创新，比如P2P网络上的存储共享，那么这是一条相当孤单的道路。 为该创新添加效用令牌并要求用户采用令牌以使用该服务会增加风险并增加采用的障碍。 它走出了已经孤独的P2P存储创新之路，进入荒野。
+
+Think of each innovation as a filter. It limits adoption to the subset of the market that can become early adopters of this innovation. Adding a second filter compounds that effect, further limiting the addressable market. You are asking your early adopters to adopt not one but two completely new technologies: the novel application/platform/service you built, and the token economy.
+
+把每一项创新想象成一个过滤器。它限制了可以成为这种创新的早期采用者的市场子集的采用。 添加第二个过滤器化合物，进一步限制了可寻址市场。您在询问您的早期采用者采用的不是一种，而是两种全新的技术：您所创建的新型应用程序/平台/服务以及令牌经济。
+
+For a startup, each innovation introduces risks that increase the chance of failure of the startup. If you take your already risky startup idea and add a utility token, you are adding all the risks of the underlying platform (Ethereum), broader economy (exchanges, liquidity), regulatory environment (equity/commodity regulators) and technology (smart contracts, token standards). That's a lot of risk for a startup.
+
+对于创业公司而言，每项创新都会带来风险，增加创业失败的机会。如果您采取已经冒险的创业想法并添加实用标记，则会增加底层平台（以太坊），更广泛的经济（交易所，流动性），监管环境（股票/商品监管机构）和技术（智能合约，令牌标准）。 这对创业公司来说是一个很大的风险。
+
+Advocates of "tokenize all the things" will likely counter that by adopting tokens, they are also inheriting the market enthusiasm, early adopters, technology, innovation and liquidity of the entire token economy. That is true too. The question is whether the benefits and enthusiasm outweigh the risks and uncertainties.
+
+“所有事物令牌化”的倡导者可能会通过采用令牌来抵制这种情况，它们也继承了整个令牌经济的市场热情，早期采用者，技术，创新和流动性。这也确实如此。问题在于利益和热情是否超过风险和不确定性。
+
+Finally, at the beginning of this chapter, when introducing tokens we discuss the colloquial meaning of token as "something of insignificant value". The underlying reason for the insignificant value of most tokens is because they can only be used in a very narrow context: one bus company, one laundromat, one arcade, one hotel, one company store. Limited liquidity, limited applicability and high conversion costs reduce the value of tokens, all the way down until it is only a "token" value. So when you add a utility token to your platform, but the token can only be used on your own one platform with a small market, you are re-creating the conditions that made physical tokens worthless. If in order to use your platform, a user has to convert something into your utility token, use it and then convert the remainder back into something more generally useful, you've created company scrip. The switching costs of a digital token are orders of magnitude lower than a physical token without a market. But the switching costs are not zero. Utility tokens that work across an entire industry sector will be very interesting and probably quite valuable. But if you set up your startup to have to bootstrap an entire industry standard in order to succeed, you may have already failed.
+
+最后，在本章开始介绍令牌，我们说令牌的口语意义即“具有无关紧要价值的事物”。大多数令牌的价值微不足道的根本原因是它们只能用在非常狭窄的场景中：一家巴士公司，一家洗衣店，一家商场，一家酒店，一家公司商店。有限的流动性，有限的实用性和高转化成本将会降低令牌的价值，直到它只是一种“标记”价值。因此，当您将应用型令牌添加到您的平台上，但该令牌只能在您自己的一个平台上使用且市场很小时，则会重新出现使现实世界法币变得毫无价值的情况。如果为了使用您的平台，用户必须将某些东西转换为您的应用型令牌，以使用它，然后将余数转换回更常用的东西，您已创建公司代码。数字令牌的转换成本比没有市场的物理令牌低几个数量级。但转换成本不是零。在整个行业部门工作的应用令牌将非常有趣，可能相当有价值。但是，如果您将创业公司设置为必须引导整个行业标准才能获得成功，那么您可能已经失败了。
+
+Make this decision for the right reasons. Adopt a token because your application _cannot work without a token_ (e.g. Ethereum). Adopt it because the token solves a fundamental market barrier or access problem. Don't introduce a utility token because it is the only way you can raise money fast and you need to pretend it's not a public securities offering. 
+
+为了正确的理由做出这个决定。因为你的应用程序无法使用令牌_（例如以太坊），所以采用令牌。采用它是因为令牌解决了基本的市场障碍或访问问题。不要引入实用标记，因为它是您快速筹集资金的唯一方式，您需要假装它不是公共证券。
