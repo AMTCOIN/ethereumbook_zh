@@ -248,9 +248,7 @@ K = f8f8a2f43c8376ccb0871305060d7b27b0554d2cc72bccf41b2705608452f315 * G
 .从示例私钥计算的示例公钥
 ----
 K = (x, y)
-
 这里,
-
 x = 6e145ccef1033dea239875dd00dfb4fee6e3348b84985c92f103444683bae07b
 y = 83b5c38e5e2b0c8529d7fa3f64d46daa1ece2d9ac14cab9477d042c84c32ccd0
 ----
@@ -344,7 +342,6 @@ y = 83b5c38e5e2b0c8529d7fa3f64d46daa1ece2d9ac14cab9477d042c84c32ccd0
 ----
 Keccak-256("") =
 c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470
-
 SHA-3("") =
 a7ffc6f8bf1ed76651c14756a061d662f580ff4de43b49fa82d80a4b80f8434a
 ----
@@ -354,11 +351,8 @@ a7ffc6f8bf1ed76651c14756a061d662f580ff4de43b49fa82d80a4b80f8434a
 接下来，我们来研究一下Ethereum中Keccak-256的第一个应用，它将从公钥生成以太坊地址。
 
 === 以太坊地址
-
 以太坊地址是使用单向散列函数（特别是Keccak-256）从公钥或合约派生的唯一标识符。
-
 在我们之前的例子中，我们从一个私钥开始，并使用椭圆曲线乘法来派生一个公钥：
-
 私钥k：
 ----
 k = f8f8a2f43c8376ccb0871305060d7b27b0554d2cc72bccf41b2705608452f315
@@ -434,7 +428,6 @@ We can use the +helpeth+ command-line tool to create ICAP addresses. Let's try w
 
 ----
 $ helpeth keyDetails -p 0xf8f8a2f43c8376ccb0871305060d7b27b0554d2cc72bccf41b2705608452f315
-
 Address: 0x001d3f1ef827552ae1114027bd3ecf1f086ba0f9
 ICAP: XE60 HAMI CDXS V5QX VJA7 TJW4 7Q9C HWKJ D
 Public key: 0x6e145ccef1033dea239875dd00dfb4fee6e3348b84985c92f103444683bae07b83b5c38e5e2b0c8529d7fa3f64d46daa1ece2d9ac14cab9477d042c84c32ccd0
