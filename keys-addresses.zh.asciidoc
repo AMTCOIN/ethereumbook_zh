@@ -132,15 +132,16 @@ Before we demonstrate how to generate a public key from a private key, let's loo
 
 [TIP]
 ====
-Ethereum uses the exact same elliptic curve, called +secp256k1+, as bitcoin. That makes it possible to re-use many of the elliptic curve libraries and tools from bitcoin.
+以太坊使用与比特币完全一样的椭圆曲线，称为+secp256k1+。这代表比特币中很多椭圆曲线的库都可以被我们复用。
 ====
 
-[[ecc-curve]]
+[[ecc-曲线]]
 [role="smallerthirty"]
-.A visualization of an elliptic curve
+.椭圆曲线的可视化
 image::images/simple_elliptic_curve.png["ecc-curve"]
 
 Ethereum uses a specific elliptic curve and set of mathematical constants, as defined in a standard called +secp256k1+, established by the National Institute of Standards and Technology (NIST). The +secp256k1+ curve is defined by the following function, which produces an elliptic curve:
+以太坊使用的特定椭圆曲线以及数学常数在一个称为+secp256k1+的标准中定义，这个标准由国立标准技术机构建立(NIST).+secp256k1+曲线由下面的方程定义。
 
 [latexmath]
 ++++
@@ -149,7 +150,7 @@ Ethereum uses a specific elliptic curve and set of mathematical constants, as de
 \end{equation}
 ++++
 
-or
+或
 
 [latexmath]
 ++++
@@ -158,22 +159,23 @@ or
 \end{equation}
 ++++
 
-The _mod p_ (modulo prime number p) indicates that this curve is over a finite field of prime order _p_, also written as latexmath:[\( \mathbb{F}_p \)], where p = 2^256^ – 2^32^ – 2^9^ – 2^8^ – 2^7^ – 2^6^ – 2^4^ – 1, a very large prime number.
+_mod p_（质数ｐ模）表明该曲线位于ｐ阶素数的有限域上，也可以写为　latexmath:[\( \mathbb{F}_p \)], 其中 p = 2^256^ – 2^32^ – 2^9^ – 2^8^ – 2^7^ – 2^6^ – 2^4^ – 1,这是一个非常大的质数。
 
-Because this curve is defined over a finite field of prime order instead of over the real numbers, it looks like a pattern of dots scattered in two dimensions, which makes it difficult to visualize. However, the math is identical to that of an elliptic curve over real numbers. As an example, <<ecc-over-F17-math>> shows the same elliptic curve over a much smaller finite field of prime order 17, showing a pattern of dots on a grid. The +secp256k1+ Ethereum elliptic curve can be thought of as a much more complex pattern of dots on a unfathomably large grid.
+因为这条曲线是在素数阶的有限域上而不是在实数域定义的，它看起来像是分散在两个维度上的散点图，使得我们很难观察。 然而，两者数学原理是相同的，散点图与与实数上的椭圆曲线是相同的。比如说，<< ecc-over-F17-math >>在一个小得多的１７阶质数的有限域上显示了相同的椭圆曲线，在网格上显示了一个点的模式。 + secp256k1 +以太坊椭圆曲线可以被认为是一个在更大的网格区域内的更加复杂的点的模式。
 
 [[ecc-over-F17-math]]
 [role="smallersixty"]
-.Elliptic curve cryptography: visualizing an elliptic curve over F(p), with p=17
+.椭圆曲线密码学: 可视化F（p）上的椭圆曲线，其中p = 17
 image::images/ec_over_small_prime_field.png["ecc-over-F17-math"]
 
-So, for example, the following is a point Q with coordinates (x,y) that is a point on the +secp256k1+ curve:
+那么，比如说，以下是坐标为（x，y）的某点Q，它是+ secp256k1 +曲线上的点：
 
 ----
 Q = (49790390825249384486033144355916864607616083520101638681403973749255924539515, 59574132161899900045862086493921015780032175291755807399284007721050341297360)
 ----
 
 <<example_1>> shows how you can check this yourself using Python. The variables x and y are the coordinates of the point Q as above. The variable p is the prime order of the elliptic curve (the prime that is used for all the modulo operations). The last line of Python is the elliptic curve equation (the % operator in Python is the modulo operator). If x and y are indeed points on the elliptic curve, then they satisfy the equation and the result is zero (+0L+ is a long integer with value zero). Try it yourself, by typing +python+ on a command line and copying each line (after the prompt +>>>+) from the listing:
+<<example_1>>展示了如何使用Python自己尝试。 变量x和y是上述点Q的坐标。 变量p是椭圆曲线的质数阶数（用于所有取模运算的素数）。 Python的最后一行是椭圆曲线方程（Python中的％运算符是取模运算符）。 如果x和y确实是椭圆曲线上的点，那么它们一定满足方程，结果一定为零（+ 0L +是值为零的长整数）。 在命令行上输入+python+并复制下面列表中的每一行(+>>>+后面的内容)自己尝试一下吧。
 
 [[example_1]]
 .Using Python to confirm that this point is on the elliptic curve
