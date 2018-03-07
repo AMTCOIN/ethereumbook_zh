@@ -411,7 +411,7 @@ ICAP采用相同的结构，引入代表"Ethereum"的非标准国家代码"XE"�
 非直接型（Indirect）:: 编码一个标识符, 它通过名称注册表提供去解析以太坊地址。利用16个字母数字字符，其中包含资产标识符（例如ETH），名称服务（例如XREG）和9字符名称（例如KITTYCATS），这是一个人类可以直接阅读的名称。 示例：+XEpass:[##]ETHXREGKITTYCATS+（20个字符长），"##"代表两个计算校验和字符。
 
 
-我们可以使用+helpeth+命令行工具来创建ICAP地址。
+我们可以使用 +helpeth+ 命令行工具来创建ICAP地址。
 以下为使用私钥示例（前缀为0x并作为参数传递给helpeth）：
 
 ----
@@ -421,7 +421,7 @@ ICAP: XE60 HAMI CDXS V5QX VJA7 TJW4 7Q9C HWKJ D
 Public key: 0x6e145ccef1033dea239875dd00dfb4fee6e3348b84985c92f103444683bae07b83b5c38e5e2b0c8529d7fa3f64d46daa1ece2d9ac14cab9477d042c84c32ccd0
 ----
 
-+helpeth+命令为我们构造了一个十六进制以太坊地址和一个ICAP地址。 我们示例密钥的ICAP地址是：
++helpeth+ 命令为我们构造了一个十六进制以太坊地址和一个ICAP地址。 我们示例密钥的ICAP地址是：
 
 ----
 XE60HAMICDXSV5QXVJA7TJW47Q9CHWKJD
@@ -431,7 +431,7 @@ XE60HAMICDXSV5QXVJA7TJW47Q9CHWKJD
 
 如果我们的地址不是从零开始，那么它将被编码为"基础型"编码，也就是35个字符长，同时作为IBAN格式是无效。
 
-[TIP]
+[小贴士]
 ====
 以零字节开始的任何以太坊地址的概率是1：256. 要生成这样一个类型的地址，在找到一个作为IBAN兼容的"直接"编码ICAP地址之前，平均需要尝试256次生成256个不同的随机私钥。
 ====
@@ -489,7 +489,7 @@ Address: 001d3F1ef827552Ae1114027BD3ECF1f086bA0F9
 Hash   : 23a69c1653e4ebbb619b0b2cb8a9bad49892a8b9...
 ----
 
-==== Detecting an error in an EIP-55 encoded address 检测EIP-55编码地址中的错误
+==== 检测EIP-55编码地址中的错误
 
 现在，我们来看看EIP-55地址如何帮助我们发现错误。 假设我们已经打印出EIP-55编码的以太坊地址：
 
