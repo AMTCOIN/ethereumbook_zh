@@ -1,85 +1,102 @@
-[[keys_addresses]]
-== Keys, Addresses
+[[私钥_地址]]
+== 私钥, 地址
 
-((("cryptography", "defined")))((("cryptography", see="also keys and addresses")))One of Ethereum's foundational technologies is _cryptography_, which is a branch of mathematics used extensively in computer security. Cryptography means "secret writing" in Greek, but the science of cryptography encompasses more than just secret writing, which is referred to as encryption. Cryptography can also be used to prove knowledge of a secret without revealing that secret (digital signature), or prove the authenticity of data (digital fingerprint). These types of cryptographic proofs are the mathematical tools critical to Ethereum and most blockchain systems and used extensively in Ethereum applications. ((("encryption")))((("encryption", see="also keys and addresses")))Ironically, encryption is not an important part of Ethereum, as its communications and transaction data are not encrypted and do not need to be encrypted to secure the system. In this chapter we will introduce some of the cryptography used in Ethereum to control ownership of funds, in the form of keys and addresses.
 
-=== Introduction
+((("密码学", "定义")))((("密码学", 参考="私钥与地址")))Ethereum最基础的知识是_密码学_; 密码学是数学的一个分支，广泛用于计算机安全领域。密码学在希腊文中表示为“秘密书写”， 但是密码学背后的科学包含了“加密”这种远比“秘密书写”内涵丰富的知识。密码学可以通过不揭示秘密的手段来验证秘密里面的内容(数字签名)；或者验证数据的真实性 (数字指纹). 这几种密码学公理不仅是以太坊，同时也是很多种区块链系统以及基于以太坊应用的最为重要的数学工具 ((("加密")))((("加密", 参考="私钥与地址")))讽刺的是，加密其实并不是以太坊最重要的部分，因为以太坊的通信以及交易数据并没有加密也并不需要加密就可以维护系统的安全。这章我将介绍以太坊中用来控制资产主权的两个概念：私钥以及地址。
 
-Ethereum has two different types of accounts, which can own and control ether: _Externally Owned Accounts_ (EOA) and _Contracts_. In this section we will examine the use of cryptography to establish ownership of ether by externally owned accounts, i.e. private keys.
 
-((("digital keys", see="keys and addresses")))((("digital signatures", "purpose of")))Ownership of ether in EOAs is established through _digital keys_, _Ethereum addresses_, and _digital signatures_. The digital keys are not actually stored on the blockchain or transmitted on the Ethereum network, but are instead created and stored by users in a file, or simple database, called a _wallet_. The digital keys in a user's wallet are completely independent of the Ethereum protocol and can be generated and managed by the user's wallet software without reference to the blockchain or access to the internet. Digital keys enable many of the interesting properties of Ethereum, including decentralized trust and control, and ownership attestation.
+=== 介绍
 
-Ethereum transactions require a valid digital signature to be included in the blockchain, which can only be generated with a secret key; therefore, anyone with a copy of that key has control of the ether. The digital signature in an Ethereum transaction proves the true owner of the funds.
 
-((("public and private keys", "key pairs")))((("public and private keys", see="also keys and addresses")))Digital keys come in pairs consisting of a private (secret) key and a public key. Think of the public key as similar to a bank account number and the private key as similar to the secret PIN, that provides control over the account. These digital keys are very rarely seen by the users of Ethereum. For the most part, they are stored inside the wallet file and managed by Ethereum wallet software.
+以太坊有两种账户，一种用于拥有以太，另一种用来控制以太，这两种账号分别为：_外部拥有账户_(EOA) 以及 _协议_。 在这部分我将审视如何通过密码学中的外部拥有账户，例如私钥，来建立以太的所有权。
 
-In the payment portion of an Ethereum transaction, the intended recipient is represented by an _Ethereum address_, which is used in the same way as the beneficiary name on a check (i.e., "Pay to the order of"). In most cases, an Ethereum address is generated from and corresponds to a public key. However, not all Ethereum addresses represent public keys; they can also represent contracts, as we will see in <<contracts>>. The Ethereum address is the only representation of the keys that users will routinely see, because this is the part they need to share with the world.
 
-First, we will introduce cryptography and explain the mathematics used in Ethereum. Next, we will look at how keys are generated, stored, and managed.  Finally, we will review the various encoding formats used to represent private and public keys, and addresses.
+((("数字签名", 参考="私钥与地址")))((("数字签名", "目的")))外部拥有账户（EOA）中的以太所有权是通过_数字秘钥_，_以太坊地址_以及_数字签名_建立的。数字秘钥并没有被存储到区块链内也并没有在以太坊网络上进行传输，实际上，数字秘钥是用于自己生成并存储到一个名为_钱包_的文件或者简易数据库中的。钱包中用户的数字私钥是完全独立于以太坊协议中的，并且这个私钥可以在完全与区块链或者互联网隔绝的情况下通过用户的钱包软件产生或者管理。数字签名使以太坊的很多例如去中心化信任与控制以及所有权验证等特点成为可能。
+
+
+以太坊交易需要将一个有效的数字签名包含在区块链中，这个数字签名可以通过私钥生成；因此，任何人只要拥有了这个私钥，就拥有了以太的所有权。以太坊交易中的数字签名证明了资产的真正所有者。
+
+
+((("公钥以及私钥", "两种秘钥")))((("公钥与私钥", 参考="私钥与地址")))数字秘钥成对出现，包含一个私（秘）钥以及一个公钥。可以将公钥看作是银行账户的账号，私钥看作是银行账户的中提供银行账户控制权的密码、这些数字秘钥是以太坊使用者很少看到的。最重要的是，这些秘钥都是存储到钱包文件中并且通过以太坊钱包管理的。
+
+
+在一个以太坊交易过程中的付款部分，交易的目标收款方通过_以太坊地址_表示，类似于支票上填写的受益人名称（即‘以某人的名义付给’）。很多情况下， 以太坊地址由公钥产生，并关联于公钥。但是，并不是所有的以太坊地址代表公钥；他们也可以代表我们在<<合约>>部分即将看到的合约。以太坊地址是用户们最常见的一种秘钥表示，因为这是用户们与世界分享的一部分。
+
+
+首先，我们将介绍密码学并解释我们在以太坊中使用到的数学，其次，我们将会阐述秘钥是如何生成，存储以及管理的。最后我们将回顾表示私钥，公钥以及地址的多种编码格式。
 
 [[pkc]]
-==== Public Key Cryptography and Cryptocurrency
 
-((("keys and addresses", "overview of", "public key cryptography")))((("digital currencies", "cryptocurrency")))Public key cryptography was invented in the 1970s and is a mathematical foundation for computer and information security.
+==== 公钥密码学以及加密货币
 
-Most modern cryptography is based on mathematical functions that have a unique property: they are easy to calculate in one direction, but very difficult to calculate in the inverse direction. Based on these mathematical functions, cryptography enables the creation of digital secrets and unforgeable digital signatures.
+((("秘钥与地址", "概述", "公钥加密")))((("数字货币", "加密货币")))公钥密码学发明与19世纪70年代，是计算机以及信息安全的数学基础。
 
-For example, multiplying two large prime numbers together is trivial. But given the product of two large primes, it is very difficult to find the prime factors (a problem called _prime factorization_). Let's say I present the number 6895601 and tell you it is the product of two primes. Finding those two primes is much harder than it was for me to multiply them to produce 6895601.
 
-Some of these mathematical functions can be inverted easily if you know some secret information. In our example above, if I tell you that one of the prime factors is 1931, you can trivially find the other one with a simple division: 6895601 / 1931 = 3571. Such functions are called _trapdoor functions_ because given one piece of secret information, you can take a shortcut that makes it trivial to reverse the function.
+当代密码学更多的是基于拥有同一个独特特点的数学函数：从一个方向计算非常简单但是从相反方向计算却非常难。基于以上数学函数，密码学使得数字秘密的产生以及不可丢失的数字签名成为可能。
 
-Another category of mathematical functions that is useful in cryptography is based on arithmetic operations on an elliptic curve. In elliptic curve arithmetic, multiplication module a prime is simple but division is impossible (a problem known as the _discrete logarithm problem_). Elliptic curve cryptography is used extensively in modern computer systems and is the basis of Ethereum's (and other cryptocurrencies') digital keys and digital signatures.
+
+例如， 将两个很大的质数相乘不是难事。但是给出两个很大的质数相乘的结果，我们很难求出这两个质数（一个被称为_指数分解_的问题）。或者我提出一个数为6895601，我告诉你这个数由两个质数得出。求出这两个质数远比将两个质数相乘得到6895601困难得多。
+
+
+如果给予你一个秘密信息，上面所说的一些问题将不难解决。比如说上面我们讨论的例子，如果我告诉你两个质数中的一个为1931， 你可以很轻松的找出与之相乘得6895601的另一个质数：6895601 / 1931 = 3571。 这类函数被称为_暗门函数_，因为给出秘密信息中的一部分，你可以找到一条捷径来将问题化简为一个很简单的问题。
+
+
+另外一类在密码学中用处很广的数学函数基于椭圆曲线上的算术运算。在椭圆曲线上，相乘模块乘以素数是较为简单的，但是除法是不可能的（一个被称为_离散对数问题_）。椭圆曲线密码学被广泛用于当代计算机系统，并且是以太坊（以及其他虚拟货币）数字秘钥以及数字签名的的基础。
 
 [TIP]
 ====
-Read more about cryptography and the mathematical functions that are used in modern cryptography:
+阅读更多关于密码学以及现代密码学中的数学函数：
 
-Cryptography:
+密码学:
 https://en.wikipedia.org/wiki/Cryptography
 
-Trapdoor Function:
+后门函数:
 https://en.wikipedia.org/wiki/Trapdoor_function
 
-Prime Factorization:
+质数分解:
 https://en.wikipedia.org/wiki/Integer_factorization
 
-Discrete Logarithm:
+离散对数:
 https://en.wikipedia.org/wiki/Discrete_logarithm
 
-Elliptic Curve Cryptography: https://en.wikipedia.org/wiki/Elliptic_curve_cryptography
+椭圆曲线加密:
+https://en.wikipedia.org/wiki/Elliptic_curve_cryptography
 ====
 
-In Ethereum, we use public key cryptography to create a key pair that controls access to ether and allows us to authenticate to contracts. The key pair consists of a private key and--derived from it--a unique public key. The public key is used to receive funds, and the private key is used to create digital signatures to sign transactions to spend the funds. Digital signatures are also used to authenticate owners or users of contracts, as we will see in <<contract_authentication>>.
 
-There is a mathematical relationship between the public and the private key that allows the private key to be used to generate signatures on messages. This signature can be validated against the public key without revealing the private key.
+以太坊中，我们使用公钥加密来创作一对秘钥，通过这对秘钥我们可以访问以太或者验证合同。这对秘钥由一个私钥和一个由此得来的独一无二的公钥构成。这个公钥用来收取资金，私钥用来制作数字签名以便签署一个交易来使用资产。数字签名同时也被用来验证所有者或者合约的使用者，我们将会在<<合约验证>>部分详细了解。
 
-When spending ether, the current owner presents her public key and a signature (different each time, but created from the same private key) in a transaction. Through the presentation of the public key and signature, everyone in the Ethereum system can independently verify and accept the transaction as valid, confirming that the person transferring the ether owned them at the time of the transfer.
+
+公钥和私钥之间有着一种数学关系，这种数学关系可以使得私钥生成信息上的签名。这个签名可以根据公钥来验证真实性并可以防止泄露私钥。
+
+
+使用以太的时候，当前的拥有者在每一笔交易中展示她的公钥以及签名（每一次都不一样，但是由同一个私钥产生）。在公钥以及签名的展示过程中，以太坊系统内的所有人都可以独自的验证并接受这笔交易为合法的，确认交易以太的人在交易当时为这些以太的拥有者。
 
 [TIP]
 ====
-((("keys and addresses", "overview of", "key pairs")))In most wallet implementations, the private and public keys are stored together as a _key pair_ for convenience. However, the public key can be trivially calculated from the private key, so storing only the private key is also possible.
+((("秘钥与地址", "概述", "秘钥对")))在绝大部分钱包软件中，私钥以及公钥为了方便共同存储为_密钥对_。但是，公钥可以通过私钥很简单的推导出，所以只存储私钥也是可行的。
 ====
 
-.Why Use Asymmetric Cryptography (Public/Private Keys)?
+.为什么使用对称加密（公/私钥）？
 ****
-((("cryptography", "asymmetric")))((("digital signatures", "asymmetric cryptography and")))((("asymmetric cryptography")))Why is asymmetric cryptography used in Ethereum? It's not used to "encrypt" (make secret) the transactions. Rather, the useful property of asymmetric cryptography is the ability to generate _digital signatures_. A private key can be applied to the digital fingerprint of a transaction to produce a numerical signature. This signature can only be produced by someone with knowledge of the private key. However, anyone with access to the public key and the transaction fingerprint can use them to _verify_ the signature. This useful property of asymmetric cryptography makes it possible for anyone to verify every signature on every transaction, while ensuring that only the owners of private keys can produce valid signatures.
+((("加密", "对称")))((("数字签名", "对称加密与")))((("对称加密")))为什么在以太坊中使用对称加密？对称加密并不用来“加密”某笔交易。对称加密有用的特性是能够生成_数字签名_。一个私钥可以应用于一笔交易中的数字指纹来生成一个数字签名。这个签名可以只能由拥有私钥的人生成。然而，任何能够访问公钥以及交易指纹的人都可以使用签名来_验证_签名。对称加密的这个有用的特性使得任何人验证任何一笔交易中的签名成为可能，同时可以确保只有私钥的拥有者可以生成有效的签名。
 ****
 
 [[private_keys]]
-==== Private Keys
+==== 私钥
 
-((("keys and addresses", "overview of", "private key generation")))((("warnings and cautions", "private key protection")))A private key is simply a number, picked at random. Ownership and control over the private key is the root of user control over all funds associated with the corresponding Ethereum address, as well as access to contracts that authorize that address. The private key is used to create signatures that are required to spend ether by proving ownership of funds used in a transaction. The private key must remain secret at all times, because revealing it to third parties is equivalent to giving them control over the ether and contracts secured by that key. The private key must also be backed up and protected from accidental loss, because if it's lost it cannot be recovered and the funds secured by it are forever lost, too.
 
+((("秘钥与地址", "概述", "生成私钥")))((("警告与注意事项", "私钥保护")))一个私钥就是一串随机挑选数字。对私钥的拥有权以及控制是用户控制某个以太坊地址的所有资产根本所在，同时这个私钥也是保证用户拥有访问授权了地址的合约的权限。私钥，通过证明在交易过程中用到的资产的所有权，可以用来生成在使用以太过程中需要用到的签名。私钥在任何时刻都要保密，因为向第三方透露秘钥就等价于给予对方对这些以太资产以及合约的所有权。私钥一定要经过备份并且一定要妥善保管，因为如果将私钥丢失就不能被找回，并且与之关联的所有资产都会永久丢失。
 [TIP]
 ====
-The Ethereum private key is just a number. You can pick your private keys randomly using just a coin, pencil, and paper: toss a coin 256 times and you have the binary digits of a random private key you can use in an Ethereum wallet. The public key and address can then be generated from the private key.
+以太坊的私钥只是一串数字。你可以通过任何方式随机生成你的私钥，例如硬币，铅笔以及纸：投掷一枚硬币２５６次之后你就拥有了一串可以在以太坊钱包中使用的２５６位的随机生成的二进制数字。公钥以及地址之后可以通过私钥产生。
 ====
 
-===== Generating a private key from a random number
+===== 通过随机数生成私钥
 
-The first and most important step in generating keys is to find a secure source of entropy, or randomness. Creating an Ethereum private key is essentially the same as "Pick a number between 1 and 2^256^." The exact method you use to pick that number does not matter as long as it is not predictable or repeatable. Ethereum software uses the underlying operating system's random number generator to produce 256 bits of entropy (randomness). Usually, the OS random number generator is initialized by a human source of randomness, which is why you may be asked to wiggle your mouse around for a few seconds, or press random keys on your keyboard.
+生成秘钥的第一步，也是最重要的一步就是寻找一个安全的熵或者随机性的来源。生成一个以太坊的私钥等价于从１到2^256挑选数字。挑选数字的方法并不重要，只要方法是不可预测的并且不是重复的。以太坊软件使用的是底层操作系统的随机数生成器来生成２５６比特的熵（随机性）。通常来说，操作系统的随机数生成器由人初始化，这就是为什么你会被要求晃动几秒钟你的鼠标或者按一些键盘上的随机键位。
 
-More precisely, the range of possible private keys is slightly less than 2^256^. The private key can be any number between +1+ and +n - 1+, where n is a constant (n = 1.158 * 10^77^, slightly less than 2^256^) defined as the order of the elliptic curve used in Ethereum (see <<elliptic_curve>>). To create such a key, we randomly pick a 256-bit number and check that it is less than +n - 1+. In programming terms, this is usually achieved by feeding a larger string of random bits, collected from a cryptographically secure source of randomness, into a 256-bit hash algorithm such as Keccak-256 or SHA256 (see <<cryptographic_hash_algorithm>>), which will conveniently produce a 256-bit number. If the result is less than +n - 1+, we have a suitable private key. Otherwise, we simply try again with another random number.
+更准确的来说，可用的私钥会稍微比2^256少。私钥可以是+1+ and +n - 1+　中的任何一个数，其中ｎ是一个常数（n = 1.158 * 10^77^,　稍微小于　2^256^）定义为以太坊中椭圆曲线的阶数（参考<<椭圆曲线>>）。为了生成一个秘钥，我们随机挑选一个２５６比特的数字并且检查这个数字是否小于+n - 1+。　在编程的的术语中，通常通过输入一个更长的，从一个加密的，安全的随机信息源里，产生的数字到一个２５６位的例如Keccak-256或者SHA256算法里（参考<<加密_哈希_算法>>），　这种方式可以产生一个256比特的数字。如果结果小于 +n - 1+，　我们就得到了一个合适的私钥。否则我们会再次尝试。
 
 [WARNING]
 ====
