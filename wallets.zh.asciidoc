@@ -169,13 +169,13 @@ BIP-39 定义了助记码和种子的创建，我们在这里分9步描述。为
 
 [[generating_entropy_and_encoding]]
 [role="smallerseventy"]
-.Generating entropy and encoding as mnemonic words生成信息熵并编码为助记码词组
-image::images/bip39-part1.png["Generating entropy and encoding as mnemonic words生成信息熵并编码为助记码词组"]
+.生成信息熵并编码为助记码词组
+image::images/bip39-part1.png["生成信息熵并编码为助记码词组"]
 
-<<table_bip39_entropy>> shows the relationship between the size of the entropy data and the length of mnemonic codes in words.展示了信息熵大小与助记码词组数量的关系。
+<<table_bip39_entropy>> 展示了信息熵大小与助记码词组数量的关系。
 
 [[table_bip39_entropy]]
-.Mnemonic codes: entropy and word length
+.助记码词组：信息熵和助记码数量
 [options="header"]
 |=======
 |信息熵 (bits) | 校验码 (bits) | 信息熵 *+* 校验码 (bits) | 助记码数量 (words)
@@ -206,8 +206,8 @@ image::images/bip39-part1.png["Generating entropy and encoding as mnemonic words
 <<fig_5_7>>展示一段助记码词组如何生成一个种子
 
 [[mnemonic_to_seed_figure]]
-.From mnemonic to seed从助记码到种子
-image::images/bip39-part2.png["From mnemonic to seed从助记码到种子"]
+.从助记码到种子
+image::images/bip39-part2.png["从助记码到种子"]
 
 [TIP]
 ====
@@ -217,7 +217,7 @@ image::images/bip39-part2.png["From mnemonic to seed从助记码到种子"]
 表格 pass:[<a data-type="xref" href="#mnemonic_128_no_pass" data-xrefstyle="select: labelnumber">#mnemonic_128_no_pass</a>], pass:[<a data-type="xref" href="#mnemonic_128_w_pass" data-xrefstyle="select: labelnumber">#mnemonic_128_w_pass</a>], and pass:[<a data-type="xref" href="#mnemonic_256_no_pass" data-xrefstyle="select: labelnumber">#mnemonic_256_no_pass</a>] 展示了一些助记码组合和它们能够生产的种子（不用密码短语）。
 
 [[mnemonic_128_no_pass]]
-.128-bit entropy mnemonic code, no passphrase, resulting seed 128位信息熵助记码，不使用用密码短语，生成种子
+.128位信息熵助记码，不使用用密码短语，生成种子
 [cols="h,"]
 |=======
 | *信息熵输入 (128 位)*| +0c1e24e5917779d297e14d45f14e1a1a+
@@ -228,7 +228,7 @@ image::images/bip39-part2.png["From mnemonic to seed从助记码到种子"]
 |=======
 
 [[mnemonic_128_w_pass]]
-.128-bit entropy mnemonic code, with passphrase, resulting seed 128位信息熵助记码，使用密码短语，生成种子
+.128位信息熵助记码，使用密码短语，生成种子
 [cols="h,"]
 |=======
 | *信息熵输入 (128 位)*| +0c1e24e5917779d297e14d45f14e1a1a+
@@ -240,7 +240,7 @@ image::images/bip39-part2.png["From mnemonic to seed从助记码到种子"]
 
 
 [[mnemonic_256_no_pass]]
-.256-bit entropy mnemonic code, no passphrase, resulting seed 256位信息熵助记码，不使用密码短语，生成种子
+.256位信息熵助记码，不使用密码短语，生成种子
 [cols="h,"]
 |=======
 | *信息熵输入 (256 位)* | +2041546864449caff939d32d574753fe684d3c947c3346713dd8423e74abcf8c+
@@ -285,7 +285,7 @@ https://www.npmjs.com/package/bip39[npm/bip39]:: 比特币BIP39的JavaScript实�
 还有一个使用可脱机网页实现的BIP-39生成器，对于测试和实验来说非常有用。 <<a_bip39_generator_as_a_standalone_web_page>> 展示了这个可脱机页面，它能够生成助记码，种子以及扩展出私钥。
 
 [[a_bip39_generator_as_a_standalone_web_page]]
-.A BIP-39 generator as a standalone web page
+.一个可脱机的BIP-39生成器网页
 image::images/bip39_web.png["BIP-39 generator web-page"]
 
 ((("", startref="mnemonic05")))((("", startref="BIP3905")))这个页面(https://iancoleman.github.io/bip39/) 可以在浏览器内离线使用，或者在线访问。
