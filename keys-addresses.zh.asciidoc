@@ -200,7 +200,7 @@ Q = (497903908252493844860331443559168646076160835201016386814039737492559245395
 <<example_1>> shows how you can check this yourself using Python. The variables x and y are the coordinates of the point Q as above. The variable p is the prime order of the elliptic curve (the prime that is used for all the modulo operations). The last line of Python is the elliptic curve equation (the % operator in Python is the modulo operator). If x and y are indeed points on the elliptic curve, then they satisfy the equation and the result is zero (+0L+ is a long integer with value zero). Try it yourself, by typing +python+ on a command line and copying each line (after the prompt +>>>+) from the listing:
 
 [[example_1]]
-.Using Python to confirm that this point is on the elliptic curve
+.使用ｐｙｔｈｏｎ证实点在椭圆曲线上
 ====
 [source, pycon]
 ----
