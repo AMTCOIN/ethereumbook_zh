@@ -1,0 +1,176 @@
+== 令牌
+=== 什么是令牌
+
+The word _token_ derives from the Old English "tacen" meaning a sign or symbol. Commonly used to mean privately-issued coin-like items that have insignificant value, as used in transportation tokens, laundry tokens, arcade tokens.
+
+"令牌"一词来源于古英语("tacen")，意思是标志或符号。通常用来表示私人发行且价值无关紧要的类似货币的东西，如运输令牌，洗衣令牌，拱廊令牌。
+
+Nowadays, tokens based on blockchains are redefining the word to mean blockchain-based abstractions that can be owned and that represent assets, currency, or access rights.
+
+近年来，随着区块链技术的兴起，基于区块链的令牌被赋予了新的含义。即令牌被抽象为区块链上有明确所有权属性的实物，这一实物可以代表资产、货币或者访问权限。
+
+The association between the word "token" and insignificant value has a lot to do with the limited use of physical tokens. Often restricted to specific businesses, organizations or locations, physical tokens are not easily exchangeable and cannot be used for more than one function. With blockchain tokens, these restrictions are erased. Many of these tokens serve multiple purposes, globally and can be traded for each other or for other currencies in global liquid markets. With those restrictions gone, the "insignificant value" expectation is also a thing of the past.
+
+"令牌"与其微不足道的价值之间的关系取决于与物理令牌受限的使用场景。由于时常受限于特定的商业活动、组织机构或者地理位置，物理令牌的接受程度较差，且仅能用于单一用途。但对于区块链令牌而言，这些限制性障碍被扫除了。许多区块链令牌都具有多种用途，可以在全球作为交易媒介或者在全球流动性市场兑换其他法定货币。
+
+In this section we look at various uses for tokens and how they are created. We also discuss attributes of tokens such as fungibility and intrinsicality. Finally, we examine the standards and technologies that they are based on and experiment by building our own tokens.
+
+这一节我们将了解令牌的各种用途和起源。我们也将讨论令牌的属性，比如可替代性和内在机制，等等。最后，我们了解令牌所基于的标准和技术并动手发布自己的令牌。
+
+=== 令牌有什么用
+
+The most obvious use of tokens is as digital private currencies. However, this is only one possible use. Tokens can be programmed to serve many different functions, often overlapping. For example, a token can simultaneously convey a voting right, an access right and ownership of a resource. Currency is just the first "app".
+
+令牌最明显的用途是数字私人货币。然而，这仅仅只是其中一项用途。令牌在被编程后能够提供许多不同的功能，它们通常是重叠的。例如，令牌可以同时传递投票权，访问权和资源所有权。 货币只是它的第一例“应用”。
+
+Currency:: A token can serve as a form of currency, with a value determined through private trade. For example, ether or bitcoin.
+
+货币:: 令牌可以作为一种货币形式，其价值通过私人交易来确定。比如以太坊或比特币。
+
+Resource:: A token can represent a resource earned or produced in a sharing-economy or resource-sharing environment. For example, a storage or CPU token representing resources that can be shared over a network.
+
+资源:: 令牌可以表示在共享经济或资源共享环境中获得或产生的资源。例如，存储类或CPU类令牌代表的资源可通过网络共享。
+
+Asset:: A token can represent ownership of an intrinsic or extrinsic, tangible or intangible asset. For example, gold, real-estate, a car, oil, energy etc.
+
+资产:: 令牌可以代表内在或外在，有形或无形资产的所有权。例如，黄金，房地产，汽车，石油，能源等
+
+Access:: A token can represent access rights and even convey access to a digital or physical property, such as a discussion forum, an exclusive website, a hotel room, a rental car.
+
+访问:: 一个令牌可以代表访问权限，甚至可以访问数字或实体资产，例如论坛，专属网站，酒店房间，租车。
+
+Equity:: A token can represent shareholder equity in a digital organization (e.g. a DAO) or legal fiction (e.g. a corporation)
+
+公平:: 令牌可以代表数字组织（如DAO）或合法机构（如公司）的股东权益，
+
+Voting:: A token can represent voting rights in a digital or legal system.
+
+投票:: 令牌可以代表数字或合法系统中的投票权。
+
+Collectible:: A token can represent a digital (e.g. CryptoPunks) or physical collectible (e.g. a painting)
+
+可收藏品:: 令牌可以代表数字（例如CryptoPunks）或现实收藏品（例如绘画）
+
+Identity:: A token can represent a digital (e.g. avatar) or legal identity (e.g. national ID).
+
+身份:: 令牌可以表示数字（例如化身）或合法身份（例如国家ID）。
+
+Attestation:: A token can represent a certification or attestation of fact by some authority or by a decentralized reputation system.
+
+公证:: 令牌可以代表某个权威机构或分布式信誉系统的认证或事实证明。
+
+Often, a single token has several of these functions overlapping. In some cases it is hard to discern between them, as the physical equivalents have always been inextricably linked. For example, in the physical world, a driver's license (attestation) is also an identity document (identity) and the two cannot be separated. In the digital realm, previously commingled functions can be separated and developed independently (e.g. an anonymous attestation).
+
+通常，单一令牌具有这些重叠功能中的多项功能。在某些情况下很难区分它们，因为物理等价物总是有着千丝万缕的联系。例如，在现实世界中，驾驶执照（证明）也是一种身份证件（身份证），两者不能分开。在数字领域，以前的混合功能可以区分开来并单独开发的（例如匿名证明）。
+
+=== 令牌和可替代性
+
+From Wikipedia:
+
+ In economics, fungibility is the property of a good or a commodity whose individual units are essentially interchangeable.
+ 
+维基百科解释：
+ 
+ 在经济学中，可替代性是物品或商品的一种属性，其个体单位本质上是可以互换的。
+
+Tokens are fungible when we can substitute any single unit of the token for another without any difference in its value or function. For example, ether is a fungible token, as any unit of ether has the same value and use as any other unit of ether.
+
+当两种令牌价值或功能没有任何差异时，我们可以用一种令牌单位代替另一种代，此时我们可以说令牌是可替换的。例如，以太是一个可替代的令牌，因为以太的任何单位具有与任何其他以太单位相同的价值和用途。
+
+Strictly speaking, if a token's historical provenance can be tracked, then it is not entirely fungible. The ability to track provenance can lead to blacklisting and whitelisting, reducing or eliminating fungibility. We will examine this further in <<privacy>>.
+
+严格地说，如果令牌的历史踪迹是可追溯的，那么它就不是完全可替代的。追踪踪迹的能力可能导致黑名单和白名单，从而降低或消除可替代性。我们将<<隐私>>中进一步研究。
+
+Non-fungible tokens are tokens that each represent a unique tangible or intangible item and therefore are not interchangeable. For example, a token that represents ownership of a _specific_ Van Gogh painting is not equivalent to another token that represents a Picasso. Similarly, a token representing a _specific_ digital collectible such as a specific CryptoKitty (see <<cryptoKitties>>) is not interchangeable with any other CryptoKitty.
+ 
+不可替代的令牌指代表独特的有形或无形商品的令牌，因此不可互换。例如，代表一副特定的梵高画作的令牌与代表毕加索画作的另一个令牌不能互相替换。同样，表示特定数字收藏品的令牌，如一只唯一的加密猫（请参阅<<cryptoKitties>>）就与任何其他的加密猫是不可互换的。
+
+We will see examples of both fungible and non-fungible tokens later in this section.
+
+接下来我们将看到可替换和不可替换令牌的例子。
+
+=== 交易对手风险
+
+Counterparty risk is the risk that the _other_ party in a transaction will fail to meet their obligations. Some types of transactions create additional counterparty risks because of the addition of more than two parties in the transaction. For example, if you hold a certificate of deposit for a precious metal and you sell that to someone, there are at least 3 parties in that transaction: the seller, the buyer and the custodian of the precious metal. Someone holds the physical asset and by necessity they become a party to, and add counterparty risk, to any transaction involving that asset. When any asset is traded indirectly through the exchange of a token of ownership, there is additional counterparty risk from the custodian of the asset. Do they have the asset? Will they recognize (or allow) the transfer of ownership based on the transfer of a token (such as a certificate, deed, title or digital token). In the world of digital tokens, it is important to understand who holds the asset that is represented by the token and what rules apply to that underlying asset.
+
+交易对手风险是交易中的其他方不能履行其义务的风险。由于在交易中增加了两个以上的交易方，某些类型的交易会产生额外的交易对手风险。例如，如果您持有贵金属存款证并将其出售给某人，则该交易中至少有三方：卖方，买方和贵金属的保管人。某人持有有形资产，必要时他们成为涉及该资产交易的一方，并增加交易对手风险。当任何资产通过交换拥有所有权的令牌实现间接交易时，资产托管人会承担额外的交易对手风险。他们是否真的拥有资产？他们是否会根据令牌的转让（例如证书，契据，标题或数字令牌）来认可（或允许）所有权转让。在数字令牌的世界中，了解谁持有由令牌表示的资产以及适用于该基础资产的规则很重要。
+
+=== 令牌及其内在机制
+
+The word "intrinsic" derives from the Latin "intra", meaning "from within".
+
+“内在”一词源于拉丁语“内部”，意思是“从内部”。
+
+Some tokens represent digital items that are _intrinsic_ to the blockchain. Those digital assets are governed by consensus rules, just like the tokens themselves. This has an important implication: tokens that represent intrinsic assets do not carry additional counterparty risk. If you hold the keys to 1 ether, there is no other party holding that ether for you. The blockchain consensus rules apply and your ownership (control) of the private keys is equivalent to ownership of the asset, without any intermediary.
+
+一些令牌代表区块链上的数字资产。这些数字资产受制于共识规则，就像令牌本身一样。 这具有重要意义：代表内在资产的令牌不会带来额外的交易对手风险。如果你拥有1个以太币的私钥，那么就没有其他人拥有这个以太币的所有权。区块链共识规则生效，您对私钥的所有权（控制权）等同于资产的所有权且无需任何中介。
+
+Conversely, many tokens are used to represent _extrinsic_ things, like real-estate, corporate voting shares, trademarks, gold bars. The ownership of these items, which are not "within" the blockchain are governed by law, custom and policy that are separate from the consensus rules that govern the token. As a result, these extrinsic assets carry additional counterparty risk because they are held by custodians, recorded in external registries, or controlled by laws and policies outside the blockchain environment.
+
+相反，许多令牌被用来代表区块链以外的现实世界中的资产，如房地产，公司投票权股份，商标，金条，等等。这些资产的所有权并不在区块链上，而是受法律，道德和政策的约束，这与形成令牌的共识规则是分离的。因此，这些外部资产会带来额外的交易对手风险，因为它们由托管人持有，记录在外部注册管理机构中，或由区块链环境以外的法律和政策保障。
+
+One of the most important ramifications of blockchain-based tokens is the ability to replace extrinsic assets into intrinsic assets and thereby remove counterparty risk. A good example is moving from equity in a corporation (extrinsic) to a equity or voting token in a _decentralized autonomous organization_ or similar (intrinsic) organization.
+
+基于区块链的令牌的最重要的后果之一是能够将外部资产替换为内部资产，从而消除交易对手风险。 一个很好的例子就是将一家公司的股权（外部）转换为一个分布式自治组织或类似的（内部）组织的股权或投票权。
+
+=== Using tokens: utility or equity
+
+=== 令牌应用：实用性或权益性
+
+Almost all projects in Ethereum today are launching with some kind of token. But do all these projects really need a token? Are there any disadvantages to using a token, or will we see the slogan "tokenize all the things" come to fruition?
+
+今天几乎所有的以太坊项目都以某种令牌的形式出现。但是，所有这些项目真的就一定需要一个令牌吗？使用令牌到底有什么缺点，或者我们应该考虑“将所有事物代币化”的口号是否成熟？
+
+First, let's start by clarifying the role of a token in a new project. The majority of projects are using tokens in one of two ways: either as "utility tokens" or as "equity tokens". Very often, those two roles are conflated and difficult to distinguish.
+
+首先，我们阐述令牌在新项目中的作用。大多数项目中令牌主要发挥一下两方面作用：“实用令牌”或者“股权令牌”。很多时候，这两个角色是混合在一起的，难以区分。
+
+Utility tokens are those where use of the token is required to pay for use of a service, application or resource. Examples of utility tokens include tokens that represent resources such as shared storage, access to services such as social media networks, or ether itself as gas for the Ethereum platform. By comparison, equity tokens are those that represent shares in a startup.
+
+应用令牌指被用来支付服务费用，应用程序或资源的令牌。应用令牌的例子包括代表资源的令牌，如共享存储，或者访问社交媒体网络等服务，或将自己作为以太坊平台的GAS。 相比之下，股权令牌指代表创业公司股票的令牌。
+
+Equity tokens can be as limited as non-voting shares for distribution of dividends and profits, or as expansive as voting shares in a decentralized-autonomous-organization, where management of the platform is through majority votes by the token holders.
+
+股权令牌与股票和利润分配的无投票权股份一样是数量有限的，也可以像分布式自治组织中的投票股一样广泛，平台的管理是通过令牌持有者的大多数投票来决定的。
+
+==== It's not a duck
+
+Just because a token is used to fundraise for a startup, doesn't mean it has to be used as payment for the service, and vice-versa. Many startups, however face a difficult problem: tokens are a great fundraising mechanism, but offering securities (equity) to the public is a regulated activity in most jurisdictions. By disguising equity tokens as utility tokens, many startups hope to get around these regulatory restrictions and raise money from a public offering while presenting it as a pre-sale of a utility token. Whether these thinly disguised equity offerings will be able to skirt the regulators remains to be seen.
+
+仅仅因为令牌用于为初创公司筹款，并不意味着它必须用作服务的支付，反之亦然。 然而，许多创业公司面临一个棘手的问题：令牌是一个很好的筹资机制，但向大众提供证券（股票）在大多数国家和地区都是受监管的活动。通过将股权令牌伪装成应用令牌，许多创业公司希望能够绕过这些监管限制，并从预售应用令牌中公开募股筹集资金。这些被变相伪装的股权产品是否能够摆脱监管机构仍有待观察。
+
+As the popular saying goes: "If it walks like a duck and quacks like a duck - it's a duck". Regulators are not likely to be distracted by these semantic contortions, quite the opposite, they are more likely to see such legal sophistry as an attempt to deceive the public.
+
+正如谚语所说：“如果它像鸭子一样走路，像鸭子一样嘎嘎叫 - 它就是一只鸭子。” 监管机构不会因这些语义游戏而转移注意力，恰恰相反，他们更有可能将这种法律诡辩看作是企图欺骗公众。
+
+==== Utility tokens: who needs them?
+
+==== 应用令牌：谁需要它们？
+
+The real problem however is that utility tokens introduce significant risks and adoption barriers for startups. Perhaps in a distant future "tokenize all the things" becomes a reality. But, at present, the number of people who have access to, understanding, and desire to use a token is a subset of the already small cryptocurrency market.
+
+然而，真正的问题在于，应用型令牌为创业公司带来了重大风险和采用障碍。 也许在不久的将来，“所有事物令牌化”将成为现实。但是，目前来看，能够掌握，理解，并愿意使用令牌的人数仅仅只是规模已经非常小的加密货币市场中的一小部分人。
+
+For a startup, each innovation represents a risk and a market filter. Innovation is taking the road least traveled, walking away from the path of tradition. It is already a lonely walk. If a startup is trying to innovate in a new area of technology, such as storage sharing over P2P networks, that is a lonely enough path. Adding a utility token to that innovation and requiring users to adopt tokens in order to use the service compounds the risk and increases the barriers to adoption. It's walking off the already lonely trail of P2P storage innovation and into the wilderness.
+
+对于创业公司而言，每项创新都代表风险和市场过滤器。创新就是探索前人没走过的道路，走出与传统迥异的道路。它注定是一段孤独的旅程。如果一家初创公司试图在一个新的技术领域进行创新，比如P2P网络上的存储共享，那么这是一条相当孤单的道路。 为该创新添加效用令牌并要求用户采用令牌以使用该服务会增加风险并增加采用的障碍。 它走出了已经孤独的P2P存储创新之路，进入荒野。
+
+Think of each innovation as a filter. It limits adoption to the subset of the market that can become early adopters of this innovation. Adding a second filter compounds that effect, further limiting the addressable market. You are asking your early adopters to adopt not one but two completely new technologies: the novel application/platform/service you built, and the token economy.
+
+把每一项创新想象成一个过滤器。它限制了可以成为这种创新的早期采用者的市场子集的采用。 添加第二个过滤器化合物，进一步限制了可寻址市场。您在询问您的早期采用者采用的不是一种，而是两种全新的技术：您所创建的新型应用程序/平台/服务以及令牌经济。
+
+For a startup, each innovation introduces risks that increase the chance of failure of the startup. If you take your already risky startup idea and add a utility token, you are adding all the risks of the underlying platform (Ethereum), broader economy (exchanges, liquidity), regulatory environment (equity/commodity regulators) and technology (smart contracts, token standards). That's a lot of risk for a startup.
+
+对于创业公司而言，每项创新都会带来风险，增加创业失败的机会。如果您采取已经冒险的创业想法并添加实用标记，则会增加底层平台（以太坊），更广泛的经济（交易所，流动性），监管环境（股票/商品监管机构）和技术（智能合约，令牌标准）。 这对创业公司来说是一个很大的风险。
+
+Advocates of "tokenize all the things" will likely counter that by adopting tokens, they are also inheriting the market enthusiasm, early adopters, technology, innovation and liquidity of the entire token economy. That is true too. The question is whether the benefits and enthusiasm outweigh the risks and uncertainties.
+
+“所有事物令牌化”的倡导者可能会通过采用令牌来抵制这种情况，它们也继承了整个令牌经济的市场热情，早期采用者，技术，创新和流动性。这也确实如此。问题在于利益和热情是否超过风险和不确定性。
+
+Finally, at the beginning of this chapter, when introducing tokens we discuss the colloquial meaning of token as "something of insignificant value". The underlying reason for the insignificant value of most tokens is because they can only be used in a very narrow context: one bus company, one laundromat, one arcade, one hotel, one company store. Limited liquidity, limited applicability and high conversion costs reduce the value of tokens, all the way down until it is only a "token" value. So when you add a utility token to your platform, but the token can only be used on your own one platform with a small market, you are re-creating the conditions that made physical tokens worthless. If in order to use your platform, a user has to convert something into your utility token, use it and then convert the remainder back into something more generally useful, you've created company scrip. The switching costs of a digital token are orders of magnitude lower than a physical token without a market. But the switching costs are not zero. Utility tokens that work across an entire industry sector will be very interesting and probably quite valuable. But if you set up your startup to have to bootstrap an entire industry standard in order to succeed, you may have already failed.
+
+最后，在本章开始介绍令牌，我们说令牌的口语意义即“具有无关紧要价值的事物”。大多数令牌的价值微不足道的根本原因是它们只能用在非常狭窄的场景中：一家巴士公司，一家洗衣店，一家商场，一家酒店，一家公司商店。有限的流动性，有限的实用性和高转化成本将会降低令牌的价值，直到它只是一种“标记”价值。因此，当您将应用型令牌添加到您的平台上，但该令牌只能在您自己的一个平台上使用且市场很小时，则会重新出现使现实世界法币变得毫无价值的情况。如果为了使用您的平台，用户必须将某些东西转换为您的应用型令牌，以使用它，然后将余数转换回更常用的东西，您已创建公司代码。数字令牌的转换成本比没有市场的物理令牌低几个数量级。但转换成本不是零。在整个行业部门工作的应用令牌将非常有趣，可能相当有价值。但是，如果您将创业公司设置为必须引导整个行业标准才能获得成功，那么您可能已经失败了。
+
+Make this decision for the right reasons. Adopt a token because your application _cannot work without a token_ (e.g. Ethereum). Adopt it because the token solves a fundamental market barrier or access problem. Don't introduce a utility token because it is the only way you can raise money fast and you need to pretend it's not a public securities offering. 
+
+为了正确的理由做出这个决定。因为你的应用程序无法使用令牌_（例如以太坊），所以采用令牌。采用它是因为令牌解决了基本的市场障碍或访问问题。不要引入实用标记，因为它是您快速筹集资金的唯一方式，您需要假装它不是公共证券。
