@@ -41,6 +41,7 @@
 如果给予你一个秘密信息，上面所说的一些问题将不难解决。比如说上面我们讨论的例子，如果我告诉你两个质数中的一个为1931， 你可以很轻松的找出与之相乘得6895601的另一个质数：6895601 / 1931 = 3571。 这类函数被称为_暗门函数_，因为给出秘密信息中的一部分，你可以找到一条捷径来将问题化简为一个很简单的问题。
 
 
+
 另外一类在密码学中用处很广的数学函数基于椭圆曲线上的算术运算。在椭圆曲线上，相乘模块乘以素数是较为简单的，但是除法是不可能的（一个被称为_离散对数问题_）。椭圆曲线密码学被广泛用于当代计算机系统，并且是以太坊（以及其他虚拟货币）数字秘钥以及数字签名的的基础。
 
 [TIP]
@@ -68,7 +69,6 @@ https://en.wikipedia.org/wiki/Elliptic_curve_cryptography
 
 
 公钥和私钥之间有着一种数学关系，这种数学关系可以使得私钥生成信息上的签名。这个签名可以根据公钥来验证真实性并可以防止泄露私钥。
-
 
 使用以太的时候，当前的拥有者在每一笔交易中展示她的公钥以及签名（每一次都不一样，但是由同一个私钥产生）。在公钥以及签名的展示过程中，以太坊系统内的所有人都可以独自的验证并接受这笔交易为合法的，确认交易以太的人在交易当时为这些以太的拥有者。
 
@@ -98,54 +98,61 @@ https://en.wikipedia.org/wiki/Elliptic_curve_cryptography
 
 更准确的来说，可用的私钥会稍微比2^256少。私钥可以是+1+ and +n - 1+　中的任何一个数，其中ｎ是一个常数（n = 1.158 * 10^77^,　稍微小于　2^256^）定义为以太坊中椭圆曲线的阶数（参考<<椭圆曲线>>）。为了生成一个秘钥，我们随机挑选一个２５６比特的数字并且检查这个数字是否小于+n - 1+。　在编程的的术语中，通常通过输入一个更长的，从一个加密的，安全的随机信息源里，产生的数字到一个２５６位的例如Keccak-256或者SHA256算法里（参考<<加密_哈希_算法>>），　这种方式可以产生一个256比特的数字。如果结果小于 +n - 1+，　我们就得到了一个合适的私钥。否则我们会再次尝试。
 
-[WARNING]
+
+[警告]
 ====
-((("random numbers", "random number generation")))((("entropy", "random number generation")))Do not write your own code to create a random number or use a "simple" random number generator offered by your programming language. Use a cryptographically secure pseudo-random number generator (CSPRNG) with a seed from a source of sufficient entropy. Study the documentation of the random number generator library you choose to make sure it is cryptographically secure. Correct implementation of the CSPRNG is critical to the security of the keys.
+((("随机数", "随机数生成器")))((("熵", "生成随机数")))Do not write your own code to create a random number or use a "simple" random number generator offered by your programming language. Use a cryptographically secure pseudo-random number generator (CSPRNG) with a seed from a source of sufficient entropy. Study the documentation of the random number generator library you choose to make sure it is cryptographically secure. Correct implementation of the CSPRNG is critical to the security of the keys.
+不要自己尝试实现一个随机数生成器，也不要使用一个某种编程语言提供的"简单"的随机数生成器。使用从具有高熵的信息源生成的种子并且使用密码学上安全的伪随机数生成器（CSPRNG）。使用随机数生成器前要阅读此生成器的文档来判断它是否密码学上足够安全。正确的CSPRNG是对保证秘钥的安全性很重要。
 ====
 
-The following is a randomly generated private key (k) shown in hexadecimal format (256 bits shown as 64 hexadecimal digits, each 4 bits):
+下面所示为一个以十六进制表示的随机生成的私钥（２５６比特用６４位１６进制数表示，每４个比特表示一个１６进制数）：
 
 ----
 f8f8a2f43c8376ccb0871305060d7b27b0554d2cc72bccf41b2705608452f315
 ----
 
 
-[TIP]
+[贴士]
 ====
 The size of Ethereum's private key space, (2^256^) is an unfathomably large number. It is approximately 10^77^ in decimal. For comparison, the visible universe is estimated to contain 10^80^ atoms.
+以太坊的私钥可能性空间（2^256^）是一个深不可测的数字。用十进制表示大约有10^77^种可能。与之比较的话，可见宇宙中大约包含10^80^原子。
 ====
 
 
-[[pubkey]]
-==== Public Keys
+[[公钥]]
+==== 公钥
 
-((("keys and addresses", "overview of", "public key calculation")))((("generator point")))An Ethereum public key is a _point_ on an elliptic curve, meaning it is a set of X and Y coordinates that satisfy the elliptic curve equation.
+((("秘钥与地址", "综述", "公钥计算")))((("生成器点")))
+以太坊的一个秘钥是一个椭圆曲线上的一个_点_，意味着这是一个由两个数Ｘ与Ｙ，满足椭圆曲线方程的一个点。
 
-In simpler terms, an Ethereum public key is two numbers, joined together. These numbers are produced from the private key by a calculation that can _only go one way_. That means that it is trivial to calculate a public key if you have the private key. But you cannot calculate the private key from the public key.
+更简单的来说，一个以太坊的公钥由两个数组成的。这些数由私钥通过一个只能_单向_的计算得出。这意味着由私钥计算公钥是很简单的，但是不能从公钥计算私钥。
 
-[[WARNING]]
+[[警告]]
 ====
-MATH is about to happen! Don't panic. If you find it hard to read the previous paragraph, you can skip the next few sections. There are many tools and libraries that will do the math for you.
+接下来没有数学部分！别担心。如果你觉得上述部分很难理解，那么你可以跳过接下来的几部分。有很多工具以及库可以帮你处理这些数学部分的内容。
 ====
 
-The public key is calculated from the private key using elliptic curve multiplication, which is irreversible: _K_ = _k_ * _G_, where _k_ is the private key, _G_ is a constant point called the _generator point_, and _K_ is the resulting public key. The reverse operation, known as "finding the discrete logarithm"—calculating _k_ if you know _K_—is as difficult as trying all possible values of _k_, i.e., a brute-force search.
+公钥通过私钥使用椭圆曲线相乘来计算得出，这个过程是不可逆的：_K_ = _k_ * _G_, 其中_ｋ_是私钥，_G_是一个称为_生成器点_的固定点，_ｋ_是对应生成的公钥。这个被称为“搜寻离散对数”，也就是由_k_计算_K_的逆操作，难度堪比遍历所有_k_的可能取值，也就是暴力搜索。　
 
-In simpler terms: arithmetic on the elliptic curve is different from "regular" integer arithmetic. A point (G) can be multiplied by an integer (k) to produce another point (K). But there is no such thing as _division_, so it is not possible to simply "divide" the public key K by the point G to calculate the private key k. This is the one-way mathematical function described in <<pkc>>.
+用更简单的话来说：椭圆曲线上的代数计算与"普通的“整数代数不同。一个点（Ｇ）可以与一个整数（ｋ）相乘得出另一个数（ｋ）。但是这个过程中不存在_相除_，所以不可能直接用点Ｇ除公钥Ｋ来得到私钥ｋ。这是一个单向数学方程，在<<pkc>>部分会继续描述。
 
 [TIP]
 ====
-Elliptic curve multiplication is a type of function that cryptographers call a "one way" function: it is easy to do in one direction (multiplication) and impossible to do in the reverse direction (division). The owner of the private key can easily create the public key and then share it with the world knowing that no one can reverse the function and calculate the private key from the public key. This mathematical trick becomes the basis for unforgeable and secure digital signatures that prove ownership of Ethereum funds and control of contracts.
+
+椭圆曲线乘法是一类密码学家们称为"单向"方程的一类方程：从一个方向（相乘）很简单，但是从反方向（相除）却不可能。私钥的所有者可以轻松地生成公钥然后与世界分享，因为大家知道没有人可以将方程反向来通过公钥计算私钥。这个数学小技巧成为不可忘并且安全的数字签名的基础，而数字签名证明了以太坊资产的所有权以及合约的控制权。
+
 ====
 
-Before we demonstrate how to generate a public key from a private key, let's look at elliptic curve cryptography in a bit more detail.
+在我们展示如何从私钥生成公钥之前，我们先来更细节的了解一下椭圆曲线加密。
 
 
-[[elliptic_curve]]
-==== Elliptic Curve Cryptography Explained
+[[椭圆曲线]]
+==== 解释椭圆曲线加密
 
-((("keys and addresses", "overview of", "elliptic curve cryptography")))((("elliptic curve cryptography", id="eliptic04")))((("cryptography", "elliptic curve cryptography", id="Celliptic04")))Elliptic curve cryptography is a type of asymmetric or public key cryptography based on the discrete logarithm problem as expressed by addition and multiplication on the points of an elliptic curve.
+((("秘钥与地址", "概述", "椭圆曲线加密")))((("椭圆曲线加密", id="eliptic04")))((("加密", "椭圆曲线加密", id="Celliptic04")))Elliptic curve cryptography is a type of asymmetric or public key cryptography based on the discrete logarithm problem as expressed by addition and multiplication on the points of an elliptic curve.
+椭圆曲线加密是一类对称且基于离散对数问题的公钥密码学，这个问题由椭圆曲线上点的相加以及相乘表示。
 
-<<ecc-curve>> is an example of an elliptic curve, similar to that used by Ethereum.
+<<ecc-曲线>> 是椭圆曲线的一个例子，与以太坊中使用的椭圆曲线很像。
 
 [TIP]
 ====
