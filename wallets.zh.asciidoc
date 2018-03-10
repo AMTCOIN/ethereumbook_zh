@@ -107,16 +107,16 @@ wall cliff insect more detail hub
 
 ==== 钱包的最佳实践
 
-((("wallets", "best practices for")))((("Bitcoin improvement proposals", "Multipurpose HD Wallet Structure (BIP-43)")))随着加密货币钱包技术的成熟，一些行业标准的也开始出现了。 这些标准的出现使得钱包更有互通性，容易使用，安全而且更具有灵活性。这些标准适合钱包支持使用一套助记码词组衍生出多个不同类型加密货币的秘钥。这些公共标准如下所列:
+((("wallets", "best practices for")))((("Bitcoin improvement proposals", "Multipurpose HD Wallet Structure (BIP-43)")))随着加密货币钱包技术的成熟，一些行业标准的也开始出现了。 这些标准的出现使得钱包更有互通性，容易使用，安全而且更具有灵活性。这些标准适合钱包支持使用一套助记码词组衍生出多个不同类型加密货币的密钥。这些公共标准如下所列：
 
 * 助记码词组（Mnemonic code words）, 基于 BIP-39
 * HD 钱包（HD wallets）, 基于 BIP-32
 * 多用途 HD 钱包结构（Multipurpose HD wallet structure）, 基于 BIP-43
 * 多货币及多账户钱包（Multicurrency and multiaccount wallets）, 基于 BIP-44
 
-这些标准也许在将来的开发中会有改变或被淘汰，但是就现在而言它们构成了一套联锁技术，成为了大多数加密货币事实上使用的钱包标准。
+这些标准也许在将来的开发中有所改变或被淘汰，但是就现在而言它们构成了一套连锁技术，成为了大多数加密货币事实上使用的钱包标准。
 
-这些标准被一系列软件钱包和硬件钱包广泛采纳，使得这些钱包间具备互操作性。用户导出其中任意一款钱包生成的助记码词组，导入另外一款钱包同样能够恢复所有的交易记录，秘钥和地址。
+这些标准被一系列软件钱包和硬件钱包广泛采纳，使得这些钱包间具备互操作性。用户导出其中任意一款钱包生成的助记码词组，导入另外一款钱包同样能够恢复所有的交易记录，密钥和地址。
 
 ////
 TODO: More complete list of BIP-39/32/43/44 wallets in Ethereum
@@ -128,16 +128,17 @@ TODO: More complete list of BIP-39/32/43/44 wallets in Ethereum
 下面的章节将逐项检查这些技术的细节。
 [TIP]
 ====
-如果你在实现一个以太坊钱包，它应该被创建为HD钱包，使用编码成助记码词组的种子作为备份，并遵循下面章节将描述的 BIP-32， BIP-39， BIP-43 和 BIP-44 标准。
+如果你在实现一个以太坊钱包，它应该被创建为HD钱包，使用编码成助记码词组的种子作为备份，并遵循后续描述的 BIP-32， BIP-39， BIP-43 和 BIP-44 标准。
 
 ====
 
 [[bip39]]
 [[mnemonic_code_words]]
+
 ==== 助记码词组（Mnemonic Code Words） (BIP-39)
 
 ((("wallets", "technology of", "mnemonic code words")))((("mnemonic code words", id="mnemonic05")))((("bitcoin improvement proposals", "Mnemonic Code Words (BIP-39)", id="BIP3905")))
-助记码词组是一组单词序列，它们表示（编码）了一个随机的数字即种子用来派生出一个确定性钱包。这个序列足够重建种子，由种子重建钱包以及所有蹭派生出的秘钥。当第一次创建使用助记码词组实现的确定性钱包时，系统会为用户显示由12或24个英文单词组成的序列。这个序列就是钱包的备份，可以在同样或者兼容的钱包应用中恢复和重建所有的秘钥。相比随机的助记码词组使得备份钱包变得简单，因为对用户来说这些词组容易辨识并较容易正确的誊写。
+助记码词组是一组单词序列，它们表示（编码）了一个随机的数字即种子用来派生出一个确定性钱包。这个序列足够重建种子，由种子重建钱包以及所有衍生出的密钥。当第一次创建使用助记码词组实现的确定性钱包时，系统会为用户显示由12或24个英文单词组成的序列。这个序列就是钱包的备份，可以在同样或者兼容的钱包应用中恢复和重建所有的密钥。相比随机的助记码词组使得备份钱包变得简单，因为对用户来说这些词组容易辨识并较容易正确的誊写。
 
 [TIP]
 ====
@@ -150,7 +151,7 @@ TODO: More complete list of BIP-39/32/43/44 wallets in Ethereum
 TODO: Make sure Electrum seeds are not usable for Ethereum
 ////
 
-BIP-39 定义了助记码和种子的创建，我们在这里分9步描述。为清楚起见，这个过程被分成了两部分：第一到第六步在<<generating_mnemonic_words>> 第七到第九步在<<mnemonic_to_seed>>
+BIP-39 定义了助记码和种子的创建，我们在这里分9步描述。为清楚起见，这个过程被分成了两部分：第一到第六步展示的是<<generating_mnemonic_words>> 第七到第九步展示的是<<mnemonic_to_seed>>
 
 [[generating_mnemonic_words]]
 ===== 生成助记码词组
@@ -189,15 +190,15 @@ image::images/bip39-part1.png["生成信息熵并编码为助记码词组"]
 [[mnemonic_to_seed]]
 ===== 从助记码到种子
 
-((("key-stretching function")))((("PBKDF2 function")))助记码词组代表了128位或者256位的信息熵。通过PBKDF2秘钥伸展功能信息熵衍生出一个更长的（512位）种子。这个种子随后被用来创建确定性钱包以及衍生相关秘钥。
+((("key-stretching function")))((("PBKDF2 function")))助记码词组代表了128位或者256位的信息熵。通过PBKDF2密钥伸展功能信息熵衍生出一个更长的（512位）种子。这个种子随后被用来创建确定性钱包以及衍生相关密钥。
 
-((("salts")))((("passphrases")))秘钥伸展功能需要两个参数：助记码和_盐（salt）_。秘钥伸展的目的是为了让创建彩虹表更加困难并以此防止暴力破解。在BIP-39标准中，盐有另外的用途&#x2014;它允许引入密码口令（passphrase）作为一种额外的保护种子的安全机制，我们会在<<mnemonic_passphrase>>更加详细的描述。
+((("salts")))((("passphrases")))密钥伸展功能需要两个参数：助记码和盐（salt）。密钥伸展的目的是为了让创建彩虹表更加困难并以此防止暴力破解。在BIP-39标准中，盐有另外的用途&#x2014;它允许引入密码口令（passphrase）作为一种额外的保护种子的安全机制，我们会在<<mnemonic_passphrase>>更加详细的描述。
 
 第七到第九步从前面描述的过程 <<generating_mnemonic_words>> 后继续：
 ++++
 <ol start="7">
 	
-	<li>PBKDF2秘钥伸展的第一个参数是第6步生成的 <em>助记码</em> 。</li>
+	<li>PBKDF2密钥伸展的第一个参数是第6步生成的 <em>助记码</em> 。</li>
 	<li>第二个参数是一段<em>盐</em>。盐是由固定字符串"<code>mnemonic</code>"串联一段可选的由用户提供的密码短语字符串构成。</li>
 	<li>PBKDF2 使用HMAC-SHA512算法进行2048轮哈希, 生成一个 512位的值作为最终输出. 这个512位的值就是种子.</li>
 </ol>
@@ -211,7 +212,7 @@ image::images/bip39-part2.png["从助记码到种子"]
 
 [TIP]
 ====
-秘钥伸展功能，以及它的2048轮哈希预算，在一定程度上是一种有效的针对助记码或密码短语暴力破解保护。它使得尝试几千种密码短语和助记码词组组合比较耗费计算资源，但同时可能衍生出的的种子数量是巨大的(2^512^)。
+密钥伸展功能，以及它的2048轮哈希运算，在一定程度上是一种有效的针对助记码或密码短语暴力破解保护。它使得尝试几千种密码短语和助记码词组组合比较耗费计算资源，但同时可能衍生出的的种子数量是巨大的(2^512^)。
 ====
 
 表格 pass:[<a data-type="xref" href="#mnemonic_128_no_pass" data-xrefstyle="select: labelnumber">#mnemonic_128_no_pass</a>], pass:[<a data-type="xref" href="#mnemonic_128_w_pass" data-xrefstyle="select: labelnumber">#mnemonic_128_w_pass</a>], and pass:[<a data-type="xref" href="#mnemonic_256_no_pass" data-xrefstyle="select: labelnumber">#mnemonic_256_no_pass</a>] 展示了一些助记码组合和它们能够生产的种子（不用密码短语）。
@@ -268,10 +269,11 @@ BIP-39中没有“错误的”密码短语，每一个密码短语都能导向�
 
 但是，需要注意的是使用助记短语同样带来了一点损失的风险：
 
-* 如果钱包的所有者丧失行为能力或者死亡并且没有人指导助记短语，种子会变得没有用处存在钱包里的所有资金都永远消失了。
+* 如果钱包的所有者丧失行为能力或者死亡，导致没有人知道助记词，种子会变得毫无用处，存在钱包里的所有资金将永远丢失。
 * 相反的，如果拥有者将助记短语和种子备份在同样的地方，那么第二保护因素就失去了意义。
 
 尽管助记短语非常有用，但是它们应该仅在有非常小心的备份和恢复计划的情况下使用，考虑到其比所有者存在更长时间的可能，允许他/她的家人恢复加密货币资产。
+
 ===== 使用助记码词组
 
 BIP-39 的实现库有多种编程语言版本：
@@ -280,7 +282,7 @@ https://github.com/trezor/python-mnemonic[python-mnemonic]:: 提出BIP-39的中�
 
 https://github.com/ConsenSys/eth-lightwallet[Consensys/eth-lightwallet]::  轻量级JS以太坊钱包提供给节点和浏览器（使用BIP-39）
 
-https://www.npmjs.com/package/bip39[npm/bip39]:: 比特币BIP39的JavaScript实现：助记码用来生成确定性秘钥
+https://www.npmjs.com/package/bip39[npm/bip39]:: 比特币BIP39的JavaScript实现：助记码用来生成确定性密钥
 
 还有一个使用可脱机网页实现的BIP-39生成器，对于测试和实验来说非常有用。 <<a_bip39_generator_as_a_standalone_web_page>> 展示了这个可脱机页面，它能够生成助记码，种子以及扩展出私钥。
 
