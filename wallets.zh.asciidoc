@@ -432,6 +432,12 @@ http://bip32.org/
 ====
 这个独立的BIP-32生成器不是一个HTTPS网站。提醒您这个工具并不安全。只用于测试用途。不要在实际应用（使用真实资金时）中使用这里生成的密钥
 ====
+
+[NOTE]
+====
+这个独立的BIP-32生成器不是一个HTTPS网站。提醒您这个工具并不安全。只用于测试用途。不要在实际应用（使用真实资金时）中使用这里生成的密钥
+====
+
 扩展公钥和私钥按照BIP-32的定义，用来生成子密钥的父密钥被叫做扩展密钥。如果是私钥，那就是扩展私钥，用前缀xprv标识：
 
 xprv9s21ZrQH143K2JF8RafpqtKiTbsbaxEeUaMnNHsm5o6wCW3z8ySyH4UxFVSfZ8n7ESu7fgir8imbZKLYVBxFPND1pniTZ81vKfd45EHKX73
