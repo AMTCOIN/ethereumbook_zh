@@ -410,21 +410,20 @@ The third level of the tree is "account," which allows users to subdivide their 
 |=======
 
 由种子创建一个HD钱包
-HD钱包是从一个根种子创建的，它可以是128-bit,256-bit或者512-bit的随机数。通常情况下，由前面章节所述，这个种子通过助记码生成。
-HD钱包里的每个私钥都是从根种子生成决定的，因此在任何兼容的钱包里可以从这个根种子重新创建整个HD钱包。这样备份，保存，导出导入一个包含成千上万个私钥的HD钱包都很容易，只要简单地转移一下用来生成根种子的助记码。
-分层确定性钱包(BIP-32)和路径(BIP-43/44)
-大部分HD钱包遵循BIP-32标准，这实际上已经成为了确定性密钥生成的行业标准。详细的规格说明请参照：
-https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki
-这里我们不详细展开BIP-32，只讨论跟理解钱包使用相关的几点。网上各个软件库里有多个可操作的BIP-32应用。
-Consensys/eth-lightwallet
-用于节点和浏览器的轻量级JS以太坊钱包
-下面链接是一个独立的网页生成器可用于测试和试验BIP-32.
-http://bip32.org/
-注：	这个独立的BIP-32生成器不是一个HTTPS网站。提醒您这个工具并不安全。只用于测试用途。
-不要在实际应用（使用真实资金时）中使用这里生成的密钥
 
-扩展公钥和私钥
-按照BIP-32的定义，用来生成子密钥的父密钥被叫做扩展密钥。如果是私钥，那就是扩展私钥，用前缀xprv标识：
+HD钱包是从一个根种子创建的，它可以是128-bit,256-bit或者512-bit的随机数。通常情况下，由前面章节所述，这个种子通过助记码生成。HD钱包里的每个私钥都是从根种子生成决定的，因此在任何兼容的钱包里可以从这个根种子重新创建整个HD钱包。这样备份，保存，导出导入一个包含成千上万个私钥的HD钱包都很容易，只要简单地转移一下用来生成根种子的助记码。
+
+分层确定性钱包(BIP-32)和路径(BIP-43/44)
+
+大部分HD钱包遵循BIP-32标准，这实际上已经成为了确定性密钥生成的行业标准。详细的规格说明请参照：https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki这里我们不详细展开BIP-32，只讨论跟理解钱包使用相关的几点。网上各个软件库里有多个可操作的BIP-32应用。Consensys/eth-lightwallet
+用于节点和浏览器的轻量级JS以太坊钱包下面链接是一个独立的网页生成器可用于测试和试验BIP-32.
+
+http://bip32.org/
+
+注：	这个独立的BIP-32生成器不是一个HTTPS网站。提醒您这个工具并不安全。只用于测试用途。不要在实际应用（使用真实资金时）中使用这里生成的密钥
+
+扩展公钥和私钥按照BIP-32的定义，用来生成子密钥的父密钥被叫做扩展密钥。如果是私钥，那就是扩展私钥，用前缀xprv标识：
+
 xprv9s21ZrQH143K2JF8RafpqtKiTbsbaxEeUaMnNHsm5o6wCW3z8ySyH4UxFVSfZ8n7ESu7fgir8imbZKLYVBxFPND1pniTZ81vKfd45EHKX73
 扩展公钥用前缀xpub标识：
 xpub661MyMwAqRbcEnKbXcCqD2GT1di5zQxVqoHPAgHNe8dv5JP8gWmDproS6kFHJnLZd23tWevhdn4urGJ6b264DfTGKr8zjmYDjyDTi9U7iyT
