@@ -997,3 +997,5 @@ Nevertheless, the importance and future impact of these standards should not be 
 The trick is to separate the long-term vision and impact of this technology, which is likely to be huge, from the short term bubble of token ICOs, which is rife with fraud. Both can be true at the same time. The token standards and platform will survive the current token mania, and then they will likely change the world.
 
 最重要的是能区分开那些很热门的有着长期愿景和对这项技术的影响的代币，与短期流行的一些 ICO 泡沫。这两者可以同时都成立。但是代币标准和平台会最终挺过这个 ICO 狂热，并且它们很有可能改变这个世界。
+（topsun: 最重要的是能区分开那些很热门的有着长期愿景和对这项技术的影响的代币，与短期流行的一些 ICO 泡沫。
+      -->最重要的是能区分开那些有着长期愿景和对这项技术会产生深远影响的代币，与短期流行的一些 ICO 泡沫，前者的增长潜力巨大。
