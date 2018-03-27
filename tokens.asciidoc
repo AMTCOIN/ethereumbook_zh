@@ -941,6 +941,8 @@ If you use an existing implementation you can also extend it. Again, be careful 
 The token standards discussed in this section start with a very minimal interface, with limited functionality. Many projects have created extended implementations, to support features that they need for their application. Some of these include:
 
 在这一章里讨论过的代币标准一开始都只有非常少的接口，能做非常少的事情。很多项目都做了自己的扩展实现来支持它们自身项目的需求。一些扩展如下：
+（topsun:在这一章里讨论过的代币标准一开始都只有非常少的接口，能做非常少的事情。
+     -->在这一章里讨论过的代币标准一开始只是一个功能有限的简易接口。）
 
 Owner Control:: Specific addresses, or set of addresses (multi-signature) are given special capabilities, such as blacklisting, whitelisting, minting, recovery etc.
 
