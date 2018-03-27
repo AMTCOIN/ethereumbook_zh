@@ -631,7 +631,7 @@ Tokens don't behave the same way as ether. Ether is sent with the +send+ functio
          2.任意外部拥有账户(EOA)
 	-->任意外部持有账户(EOA)
 	 3.代币是通过只存在鱼 ERC20 合约里的
-	-->代币是通过只存在于 ERC20 合约里的
+	-->代币是通过只存在于 ERC20 合约里的 ）
 Consider another issue. To send ether, or use any Ethereum contract you need ether to pay gas. To send tokens, you _also need ether_. You cannot pay for a transaction's gas with a token and the token contract can't pay the gas for you. This can cause some rather strange user experiences. For example, let's say you use an exchange or Shapeshift to convert some bitcoin to a token. You "receive" the token in a wallet that tracks that token's contract and shows your balance. It looks the same as any of the other cryptocurrencies you have in your wallet. Now try sending the token and your wallet will inform you that you need ether to do that. You might be confused - after all you didn't need ether to receive the token. Perhaps you have no ether. Perhaps you didn't even know the token was an ERC20 token on Ethereum, maybe you thought it was a cryptocurrency with its own blockchain. The illusion just broke.
 
 现在我们来看另一个问题。想要给别人转以太或者使用以太坊合约，你需要以太来支付相应的交易工作量(gas)。想要给别人转代币，你同样需要以太。你无法用代币来支付一笔交易所需的计算工作量，你的代币合约也同样无法为你支付所需的计算工作量。这就会导致一些非常奇怪的用户体验。打比方说你用某个交易所把一些比特币换成了某种代币。你『接收』到了这些代币并且用钱包监听了这个代币的合约以显示你的余额。这跟你在钱包里拥有的其他加密货币看起没有什么不同。但是如果你现在想要把这些代币转出去，你的钱包就会提醒你说你需要有以太才能转账。你可能会觉得非常奇怪，毕竟你接收这些代币的时候都没有需要用到以太。你可能没有以太。你可能根本就不知道这个代币是基于以太坊 ERC20 的一种代币，你可能还觉得它是一种拥有自己区块链的加密货币。不管怎样，这样的臆想在你转不出去账的时候破灭了。
@@ -951,10 +951,14 @@ Owner Control:: Specific addresses, or set of addresses (multi-signature) are gi
 Burning:: A token burn is when tokens are deliberately destroyed by transfer to an unspendable address or by erasing a balance and reducing the supply.
 
 销毁：销毁一个代币是指当代币被故意转到某个无法使用的地址或者减少余额来达到减少供应的目的。
+（topsun:或者减少余额来达到减少供应的目的
+    --> 或者抹去余额来达到减少供应的目的 ）
 
 Minting:: The ability to add to the total supply of tokens, at a predictable rate, or by "fiat" of the creator of the token.
 
 铸币：以一个可预测的比率增加代币总供应量的能力，或者说代币创造者『发行』代币的能力。
+（topsun:铸币：以一个可预测的比率增加代币总供应量的能力，或者说代币创造者『发行』代币的能力。
+    --> 铸币：增加代币总供应量的能力，这种增长或遵循一个可预测的比率，或取决于代币创造者『发行』代币的意愿/能力。）
 
 Crowdfunding:: The ability to offer tokens for sale, for example through an auction, market sale, reverse-auction, etc.
 
@@ -967,6 +971,8 @@ Caps:: Pre-defined and immutable limits on the total supply, the opposite of the
 Recovery "Back Doors":: Functions to recover funds, reverse transfers, or dismantle the token that can be activated by a designated address or set of addresses (multi-signature).
 
 恢复『后门』：可以恢复资金、转账或者废除某个代币的函数，这通常可以被一个或多个指定的地址激活。
+（topsun:恢复『后门』：可以恢复资金、转账或者废除某个代币的函数，这通常可以被一个或多个指定的地址激活。
+     -->恢复『后门』：可以恢复资金、撤销转账或者废除某个代币的函数，此类代币通常可以被一个或多个指定的地址激活。）
 
 Whitelisting:: The ability to restrict token transfers only to listed addresses. Most commonly used to offer tokens to "accredited investors" after vetting by the rules of different jurisdictions. There is usually a mechanism for updating the whitelist.
 
@@ -983,6 +989,8 @@ There are some reference implementations for many of these functions, for exampl
 As previously discussed, the decision to extend a token standard with additional functionality represents a tradeoff between innovation/risk and interoperability/security.
 
 正如之前所讨论的，是否向一个代币标准增加新功能的决策过程实际上是在权衡创新/冒险和兼容性/安全性。
+（topsun:是否向一个代币标准增加新功能的决策过程实际上是在权衡创新/冒险和兼容性/安全性。
+    --> 是否向一个代币标准增加新功能的决策过程实际上是在创新与冒险,兼容性与安全性之间的权衡取舍。）
 
 === Tokens and ICOs
 
@@ -1000,4 +1008,4 @@ The trick is to separate the long-term vision and impact of this technology, whi
 
 最重要的是能区分开那些很热门的有着长期愿景和对这项技术的影响的代币，与短期流行的一些 ICO 泡沫。这两者可以同时都成立。但是代币标准和平台会最终挺过这个 ICO 狂热，并且它们很有可能改变这个世界。
 （topsun: 最重要的是能区分开那些很热门的有着长期愿景和对这项技术的影响的代币，与短期流行的一些 ICO 泡沫。
-      -->最重要的是能区分开那些有着长期愿景和对这项技术会产生深远影响的代币，与短期流行的一些 ICO 泡沫，前者的增长潜力巨大。
+      -->最重要的是能区分开那些有着长期愿景和对这项技术会产生深远影响的代币，与短期流行的一些 ICO 泡沫，前者的增长潜力巨大。）
