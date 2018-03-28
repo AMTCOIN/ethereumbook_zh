@@ -818,7 +818,8 @@ mapping (uint256 => address) private deedOwner;
 Whereas ERC20 tracks the balances that belong to each owner, with the owner being the primary key of the mapping, ERC721 tracks each deed ID and who owns it, with the deed ID being the primary key of the mapping. From this basic difference flow all the properties of a non-fungible token.
 
 ERC20 通过把拥有者作为映射的主键来实现追踪拥有者的余额，而 ERC721 通过把契据 ID 作为映射的主键来实现追踪每个契据的它的拥有者。这个基本的区别影响着不可替换代币的所有属性。
-
+(topsun:而 ERC721 通过把契据 ID 作为映射的主键来实现追踪每个契据的它的拥有者
+    --> 而 ERC721 通过把契据 ID 作为映射的主键来实现追踪每个契据和它的拥有者）
 The ERC721 contract interface specification is:
 
 ERC721 合约的接口规格：
