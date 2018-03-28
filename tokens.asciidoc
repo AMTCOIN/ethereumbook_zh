@@ -923,6 +923,8 @@ As part of this consideration is an even bigger issue: the value of interoperabi
 另外一个更大的考虑是：兼容性和广泛的使用率。如果你使用一个现有的标准，你就能够利用到所有遵循这个标准的系统。如果你不选择使用任何标准，你必须要考虑到自己开发所有基础设施的成本或者是劝说他人认可你的新标准。这种忽略现有标准而自行创造新标准的倾向被称为『非我所创』，与开源文化正好相反。在另一方面，进步和创新有时正是离经叛道的结果。所以这是个不太好抉择的问题，仔细考虑吧！
 (topsun:1.如果你不选择使用任何标准
       -->如果你不选择使用这个标准
+        2.所以这是个不太好抉择的问题
+      --> 所以这是个棘手的选择。
 .Wikipedia "Not Invented Here" (https://en.wikipedia.org/wiki/Not_invented_here)
  Not invented here is a stance adopted by social, corporate, or institutional cultures that avoid using or buying already existing products, research, standards, or knowledge because of their external origins and costs, such as royalties.
 
