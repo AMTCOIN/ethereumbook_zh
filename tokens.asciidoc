@@ -930,7 +930,9 @@ As part of this consideration is an even bigger issue: the value of interoperabi
 
 .维基百科 『非我所创』(https://en.wikipedia.org/wiki/Not_invented_here)
 非我所创或NIH综合症（英文：Not Invented Here Syndrome），指的是社会、公司和组织中的一种文化现象，人们不愿意使用、购买或者接受某种产品、研究成果或者知识，不是出于技术或者法律等因素，而只是因为它源自其他地方。
-
+(topsun:1.人们不愿意使用、购买或者接受某种产品、研究成果或者知识，不是出于技术或者法律等因素，而只是因为它源自其他地方。
+      --> 由于来源于外面以及经费因素（比如版权）人们不愿意使用、购买既有的产品、研究成果 标准或者知识。)
+      
 === Security by maturity
 
 === 安全性成熟度
@@ -938,14 +940,22 @@ As part of this consideration is an even bigger issue: the value of interoperabi
 Beyond the choice of standard, there is the parallel choice of _implementation_. When you decide to use a standard, such as ERC20, you have to then decide how to implement a compatible token. There are a number of existing "reference" implementations that are broadly used in the Ethereum ecosystem. Or you could write your own from scratch. Again, this choice represents a dilemma that can have serious security implications.
 
 除了标准的选择，实现同样也需要选择。当你决定采用某个标准时，比如说 ERC20，你必须接下来决定怎样实现一个 ERC20 兼容的代币。现在已经有一些被以太坊生态广泛使用的『参考』实现。或者你也可以从头开始自己写。这样的选择面临着能够严重影响安全性的两难境地。
+（topsun:或者你也可以从头开始自己写。这样的选择面临着能够严重影响安全性的两难境地。
+      -->或者你也可以从头开始自己写, 但安全性有可能因此受到严重影响。）
 
 Existing implementations are "battle tested". While it is impossible to prove that they are secure, many of them underpin millions of dollars of tokens. They have been attacked, repeatedly and vigorously. So far, no significant vulnerabilities have been discovered. Writing your own is not easy - there are many subtle ways that a contract can be compromised. It is much safer to use a well-tested broadly-used implementation. In our examples above, we used the OpenZeppelin implementation of the ERC20 standard, as this implementation is security focused from the ground up.
 
 现有的标准是『久经沙场』的。虽然说我们不能完全证明这些标准就一定是绝对安全的，但大多数标准都支撑着价值数百万美元的代币。它们一直被不断地、猛烈地攻击着。至少到目前为止，还没有任何明显的漏洞出现。开发一个你自己的标准并不是件容易的事 -- 有太多不太容易察觉的方式可以侵入你的合约。使用一个彻底测试的、广泛采用的实现是相对来说更安全的做法。在我们之前的例子里，我们使用的是 OpenZeppelin 对 ERC20 的实现，因为这个实现从头到尾都非常注重安全性。
+（topsun:1.现有的标准是『久经沙场』的
+       --> 现有的很多实现是『久经沙场』的
+         2.虽然说我们不能完全证明这些标准就一定是绝对安全的，但大多数标准都支撑着价值数百万美元的代币。
+       --> 虽然说我们不能完全证明这些实现就一定是绝对安全的，但其中大多数支撑着价值数百万美元的代币。)
 
 If you use an existing implementation you can also extend it. Again, be careful with this impulse. Complexity is the enemy of security. Every single line of code you add expands the _attack surface_ of your contract and could represent a vulnerability lying in wait. You may not notice a problem until you put a lot of value on top of the contract and someone breaks it.
 
 如果你使用一个现有的实现，你也可以扩展它。同样，对于这样的冲动需要保持冷静。复杂度是安全性的敌人。每一行新加入的代码都扩大了合约的被攻击面或者引入了新的等待被发现的漏洞。你可能并不能意识到某个漏洞知道你在这个合约上面放了非常多的价值，然后别人黑了你的合约。
+（topsun: 你可能并不能意识到某个漏洞知道你在这个合约上面放了非常多的价值，然后别人黑了你的合约。
+       -->你可能并不能意识到某个漏洞直到这个合约价值高升，然后别人黑了你的合约。）
 
 === Extensions to token interface standards
 
