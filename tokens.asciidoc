@@ -724,6 +724,8 @@ ERC777 是另外一个致力于改善代币合约的提案。这个提案有如�
 * 在发送代币之前，合约和地址可以控制哪些代币会通过 `tokensToSend` 函数发送
 * Contracts and addresses are notified by calling a +tokensReceived+ function in the recipient
 * 接收者可以通过调用 `tokensReceived` 函数来通知合约和地址
+ (topsun:接收者可以通过调用 `tokensReceived` 函数来通知合约和地址
+     --> 可以通过调用接收方的 `tokensReceived` 函数来通知合约和地址）
 * Token transfer transactions contain metadata in a +userData+ and +operatorData+ field
 * 代币转账交易会在 `userData` 和 `operatorData` 中包含元数据
 * To operate in the same way, whether sending to a contract or EOA
@@ -766,7 +768,8 @@ interface ERC777Token {
 A reference implementation of ERC777 is linked in the proposal. ERC777 depends on a parallel proposal for a registry contract, specified in ERC820. Some of the debate on ERC777 is about the complexity of adopting two big changes at once: a new token standard and a registry standard. The discussion continues.
 
 ERC777 的提案提供了一份参考实现。ERC777 依赖于 ERC820 所提出的合约注册。因此一些关于 ERC777 的争论围绕着一次性采纳两个大的变化（一个新的代币标准和一个注册标准）的复杂度。这样的争论还在继续。
-
+(topsun: ERC777 依赖于 ERC820 所提出的合约注册
+      -->ERC777 依赖于 一份在ERC820中提到的注册合约提案）
 ==== ERC721 - non-fungible token (deed) standard
 
 ==== ERC721 - 不可替换的代币标准（契据）
