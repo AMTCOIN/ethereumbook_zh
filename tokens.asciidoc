@@ -609,31 +609,47 @@ truffle(ganache)> BigNumber { s: 1, e: 3, c: [ 1000 ] }
 The adoption of the ERC20 token standard has been truly explosive. Thousands of tokens have been launched, both to experiment with new capabilities and to raise funds in various "crowdfund" auctions and Initial Coin Offerings (ICOs). However there are some potential pitfalls, as we saw with the issue of transferring tokens to contract addresses.
 
 ERC20 代币标准已经被极其广泛地采用。成千上万的代币发行即是为了实验新的特性也是为了通过众筹拍卖或 ICO 来融资。不过，正如我们看到，采用 ERC20 代币在将代币转移到合约地址时会有一些问题。
-
+(topsun: 即是为了实验新的特性 
+     --> 即是为了实验新的性能)
+         
 One of the less obvious issues with ERC20 tokens is that they expose subtle differences between tokens and ether itself. Where ether is transferred by a transaction which has a recipient address as its destination, token transfers occur within the _specific token contract state_ and have the token contract as their destination, not the recipient's address. The token contract tracks balances, and issues events. In a token transfer, no transaction is actually sent to the recipient of the token. Instead, the recipients address is added to a map within the token contract itself. A transaction sending ether to an address, changes the state of an address. A transaction transferring a token to an address, only changes the state of the token contract, not the state of the recipient address. Even a wallet that has support for ERC20 tokens does not become aware of a token balance, unless the user explicitly adds a specific token contract to "watch". Some wallets watch the most popular token contracts to detect balances held by addresses they control, but that's limited to a small fraction of the available ERC20 contracts.
 
 其中一个不太明显的问题是 ERC20 代币和以太(ether)本身是有细微差别的。以太的转移是靠一笔有收款人地址的交易(transaction)来完成，而代币的转移是在某个具体的代币合约里完成，其接收者是这个代币合约而不是一个收款人地址。代币合约会跟踪余额以及发布事件。在一次代币转移中，实际上没有一笔真正的交易发到代币的接收者那里，而是把收款人地址加到了代币合约中。一笔通常意义上发送以太到某个地址的交易是在改变那个地址的状态。一笔转移代币到某个地址的交易只更改了合约的状态而没有改变收款人地址的状态。即便是一个支持 ERC20 代币的钱包也不会变得能够知道代币余额，除非用户特地添加了个监控代币余额的合约。有些钱包会监听最热门的合约来获取用户所掌握的代币余额信息，但是这仅限于非常小部分的 ERC20 合约。
+(topsun:而是把收款人地址加到了代币合约中 
+     -->而是把收款人地址加到了包含于代币合约中映射）
 
 In fact, it's unlikely that a user would _want_ to track all balances in all possible ERC20 token contracts. Many ERC20 tokens are more like email spam than usable tokens. They automatically create balances for accounts that have ether activity, to attract users. If you have an Ethereum address with a long history of activity, especially if it was created in the presale, you will find it full of "junk" tokens that appeared out of nowhere. Of course, the address isn't really full of tokens, it's the token contracts that have your address in them. You only see these balances if these tokens contracts are being watched by the block explorer or wallet you use to view your address.
 
 事实上，一个用户不太可能会想监听所有的代币合约里的代币余额。很多 ERC20 代币更像是垃圾邮件而不是有价值的代币。这些代币会为了吸引用户，自动为有以太活动的账户创建余额。如果你拥有一个有长期活动历史的以太坊地址，特别是如果这个地址是在预售期被创建的，你会发现这里面充满了不知道从哪冒出来的『垃圾』代币。当然，这些地址里不是真正地充满了代币，而是那些代币合约里有你的这些地址。你只有当你用区块链浏览器或者钱包去监听这些合约里你的地址时才会看到这些余额。
-
+（topsun:你只有当你用区块链浏览器或者钱包去监听这些合约里你的地址时才会看到这些余额
+    -->   只有当你用区块链浏览器或者钱包去监听这些合约里你的地址时才会看到这些余额
 Tokens don't behave the same way as ether. Ether is sent with the +send+ function and accepted by any payable function in a contract or any externally owned address. Tokens are sent using +transfer+ or +approve & transferFrom+ functions that exist only in the ERC20 contract, and do not (at least in ERC20) trigger any payable functions in a recipient contract. Tokens are meant to function just like a cryptocurrency such as ether, but they come with certain subtle distinctions that break that illusion.
 
 代币和以太的具体表现是不一样的。以太是通过发送函数(send function)进行发送并且可以被任意合约里的应付函数(payable function)或任意外部拥有账户(EOA)所接收。代币是通过只存在鱼 ERC20 合约里的 transfer 或者 approve & transferFrom 函数进行发送，并且至少在 ERC20 中并不会触发任何接收人合约的应付函数。代币的职能本来是应该和以太这样的加密货币一样，但是他们本身和以太一些细微的不同打破了这样的幻想。
-
+(topsun: 1.代币和以太的具体表现是不一样的
+        -->代币和以太的运作方式是不一样的。
+         2.任意外部拥有账户(EOA)
+	-->任意外部持有账户(EOA)
+	 3.代币是通过只存在鱼 ERC20 合约里的
+	-->代币是通过只存在于 ERC20 合约里的 ）
 Consider another issue. To send ether, or use any Ethereum contract you need ether to pay gas. To send tokens, you _also need ether_. You cannot pay for a transaction's gas with a token and the token contract can't pay the gas for you. This can cause some rather strange user experiences. For example, let's say you use an exchange or Shapeshift to convert some bitcoin to a token. You "receive" the token in a wallet that tracks that token's contract and shows your balance. It looks the same as any of the other cryptocurrencies you have in your wallet. Now try sending the token and your wallet will inform you that you need ether to do that. You might be confused - after all you didn't need ether to receive the token. Perhaps you have no ether. Perhaps you didn't even know the token was an ERC20 token on Ethereum, maybe you thought it was a cryptocurrency with its own blockchain. The illusion just broke.
 
 现在我们来看另一个问题。想要给别人转以太或者使用以太坊合约，你需要以太来支付相应的交易工作量(gas)。想要给别人转代币，你同样需要以太。你无法用代币来支付一笔交易所需的计算工作量，你的代币合约也同样无法为你支付所需的计算工作量。这就会导致一些非常奇怪的用户体验。打比方说你用某个交易所把一些比特币换成了某种代币。你『接收』到了这些代币并且用钱包监听了这个代币的合约以显示你的余额。这跟你在钱包里拥有的其他加密货币看起没有什么不同。但是如果你现在想要把这些代币转出去，你的钱包就会提醒你说你需要有以太才能转账。你可能会觉得非常奇怪，毕竟你接收这些代币的时候都没有需要用到以太。你可能没有以太。你可能根本就不知道这个代币是基于以太坊 ERC20 的一种代币，你可能还觉得它是一种拥有自己区块链的加密货币。不管怎样，这样的臆想在你转不出去账的时候破灭了。
-
+(topsun:1.打比方说你用某个交易所把一些比特币换成了某种代币
+      --> 打比方说你用某个交易所或"Shapeshift"把一些比特币换成了某种代币)
+      
 Some of these issues are specific to ERC20 tokens. Others are more general issues that relate to abstraction and interface boundaries within Ethereum. Some can be solved by changing the token interface, others may need changes to fundamental structures within Ethereum (such as the distinction between EOAs and contracts, and between transactions and messages). Some may not be "solvable" exactly and may require user interface design to hide the nuances and make the user experience consistent regardless of the underlying distinctions.
 
 有些问题是针对于 ERC20 代币的，而其他的是更宽泛的、跟以太坊抽象和接口边界有关的问题。有些问题能通过修改代币接口解决，有的可能需要改变以太坊的基础架构（比如外部拥有账户(EOA)和合约(contract)之间的差异，交易(transaction)和消息(message)之间的差异）。有些差异可能并不能被消除，它们需要通过一些用户界面的隐藏使得用户感知不到内部的细微差异。
-
+(topsun:1.跟以太坊抽象和接口边界有关的问题
+     -->  是一些和以太坊本身的抽象和接口边界有关的问题
+        2.有些差异可能并不能被消除，它们需要通过一些用户界面的隐藏使得用户感知不到内部的细微差异。
+     -->  有些问题可能并不会被完美解决，但通过用户界面设计的技巧，这些问题得以隐藏，从而使用户感知不到内部的细微差异。）
 In the next sections we will look at various proposals that attempt to address some of these issues.
 
 在下面一个章节我们将会介绍一些想要解决以上部分问题的提案。
-
+（topsun:在下面一个章节我们将会介绍一些想要解决以上部分问题的提案。
+    -->  在下面一个章节我们将会介绍一些针对解决以上部分问题的提案。）
 ==== ERC223 - a proposed token contract interface standard
 
 ==== ERC223 - 一个代币合约接口标准提案
@@ -708,6 +724,8 @@ ERC777 是另外一个致力于改善代币合约的提案。这个提案有如�
 * 在发送代币之前，合约和地址可以控制哪些代币会通过 `tokensToSend` 函数发送
 * Contracts and addresses are notified by calling a +tokensReceived+ function in the recipient
 * 接收者可以通过调用 `tokensReceived` 函数来通知合约和地址
+ (topsun:接收者可以通过调用 `tokensReceived` 函数来通知合约和地址
+     --> 可以通过调用接收方的 `tokensReceived` 函数来通知合约和地址）
 * Token transfer transactions contain metadata in a +userData+ and +operatorData+ field
 * 代币转账交易会在 `userData` 和 `operatorData` 中包含元数据
 * To operate in the same way, whether sending to a contract or EOA
@@ -750,7 +768,8 @@ interface ERC777Token {
 A reference implementation of ERC777 is linked in the proposal. ERC777 depends on a parallel proposal for a registry contract, specified in ERC820. Some of the debate on ERC777 is about the complexity of adopting two big changes at once: a new token standard and a registry standard. The discussion continues.
 
 ERC777 的提案提供了一份参考实现。ERC777 依赖于 ERC820 所提出的合约注册。因此一些关于 ERC777 的争论围绕着一次性采纳两个大的变化（一个新的代币标准和一个注册标准）的复杂度。这样的争论还在继续。
-
+(topsun: ERC777 依赖于 ERC820 所提出的合约注册
+      -->ERC777 依赖于 一份在ERC820中提到的注册合约提案）
 ==== ERC721 - non-fungible token (deed) standard
 
 ==== ERC721 - 不可替换的代币标准（契据）
@@ -778,7 +797,8 @@ The use of the word deed is intended to reflect the "ownership of property" part
 Non-fungible tokens track ownership of a unique thing. The thing owned can be a digital item, such as a game item, or digital collectible. Or, the thing can be a physical item whose ownership is tracked by a token, such as a house, a car, artwork. A deed could also represent things with negative value, such as loans (debt), liens, easements, etc. The ERC721 standard places no limitation or expectation on the nature of the thing whose ownership is tracked by a deed, only that it can be uniquely identified, which in the case of this standard is achieved by a 256-bit identifier.
 
 不可替换的代币追踪对某个独特事物的所有权。被拥有的事物可以是数字虚拟物品，比如一款游戏或是数字藏品。被拥有的事物也可以是现实世界里的物品，比如一栋房子，一辆车或是一件艺术品。一个契据也可以用来代表负向的拥有权比如借款，抵押，地役权等。ERC721 标准并没有对契据可以追踪所有权的事物做任何限制。ERC721通过256位的标识符来实现了被追踪的事物的唯一标识。
-
+(topsun: ERC721 标准并没有对契据可以追踪所有权的事物做任何限制
+      -->ERC721 标准并没有对契据可以追踪所有权的事物做任何限制和期望）
 The details of the standard and discussion are tracked in two different GitHub locations:
 
 此标准的细节和相关讨论记录在下面两个 GitHub 地址里：
@@ -808,7 +828,8 @@ mapping (uint256 => address) private deedOwner;
 Whereas ERC20 tracks the balances that belong to each owner, with the owner being the primary key of the mapping, ERC721 tracks each deed ID and who owns it, with the deed ID being the primary key of the mapping. From this basic difference flow all the properties of a non-fungible token.
 
 ERC20 通过把拥有者作为映射的主键来实现追踪拥有者的余额，而 ERC721 通过把契据 ID 作为映射的主键来实现追踪每个契据的它的拥有者。这个基本的区别影响着不可替换代币的所有属性。
-
+(topsun:而 ERC721 通过把契据 ID 作为映射的主键来实现追踪每个契据的它的拥有者
+    --> 而 ERC721 通过把契据 ID 作为映射的主键来实现追踪每个契据和它的拥有者）
 The ERC721 contract interface specification is:
 
 ERC721 合约的接口规格：
@@ -869,6 +890,8 @@ interface ERC721Enumerable /* is ERC721 */ {
 In this section we've reviewed several proposed standards, and a couple of widely-deployed standards for token contracts. What exactly do these standards do? Should you use these standards? How should you use them? Should you add functionality beyond these standards? Which standards should you use? We will examine all those questions next.
 
 在这一章里，我们介绍了几个标准提案以及一些已经大规模采纳的代币合约标准。这些标准到底是做什么的？你应该使用这些标准吗？你应该添加标准之外的功能吗？你到底应该使用哪个标准？我们接下来会一一回答这些问题。
+（topsun:你应该使用这些标准吗？你应该添加标准之外的功能吗？
+    --> 你应该使用这些标准吗？怎样使用这些标准？你应该添加标准之外的功能吗？）
 
 ==== What are token standards? What is their purpose?
 
@@ -877,10 +900,16 @@ In this section we've reviewed several proposed standards, and a couple of widel
 Token standards are a _minimum_ specification for an implementation. What that means is that in order to be compliant with, say ERC20, you need to, at-minimum, implement the functions and behavior specified by ERC20. You are also free to _add_ to the functionality by implementing functions that are not part of the standard.
 
 代币标准是一套最少需要具体实现的功能。这代表着想要遵循，比如 ERC20 标准，你至少需要实现那些 ERC20 所规定的函数和行为。你同时也可以自由地添加并不在标准里规定的功能。
+（topsun:1.代币标准是一套最少需要具体实现的功能。
+      --> 代币标准是一系列执行的最简化说明。
+        2.这代表着想要遵循
+      --> 这意味着为了合规）
 
 The primary purpose of these standards is to encourage _interoperability_ between contracts. Thus, all wallets, exchanges, user interfaces and other infrastructure components can _interface_ in a predictable manner with any contract that follows the specification.
 
 这些标准的主要目标是增加合约之间的协作能力。这样的话，所有的钱包、交易所、用户界面和其他的基础设施可以使用可预测的接口来和任何符合标准的合约交流。
+（topsun:可以使用可预测的接口来和任何符合标准的合约交流
+    --> 可以使用一种可预测的方式来和任何符合标准的合约交流）
 
 The standards are meant to be _descriptive_, rather than _prescriptive_. How you choose to implement those functions is up to you - the internal function of the contract is not relevant to the standard. They have some functional requirements, which govern the behavior under specific circumstances, but they do not prescribe an implementation. An example of this is the behavior of a transfer function if the value is set to zero.
 
@@ -897,17 +926,24 @@ Given all these standards, each developer faces a dilemma: use the existing stan
 This dilemma is not easy to resolve. Standards necessarily restrict your ability to innovate, by creating a narrow "rut" that you have to follow. On the other hand, the basic standards have emerged from experience with hundreds of applications and often fit well with 99% of the use-cases.
 
 这个问题并不能轻易地解决。标准会把你固定在一个很窄的『车道』上来限制你创新的空间。但是从另一个角度来看，这些总结于数百个应用的基本标准通常适用于99%的用例。
+(topsun: 这些总结于数百个应用的基本标准通常适用于99%的用例。
+     --> 这些总结自数百个应用的基本标准通常适用于99%的用例。）
 
 As part of this consideration is an even bigger issue: the value of interoperability and broad adoption. If you choose to use an existing standard, you gain the value of all the systems designed to work with that standard. If you choose to depart from the standard, you have to consider the cost of building all of the support infrastructure on your own, or persuading others to support your implementation as a new standard. The tendency to forge your own path and ignore existing standards is known as "Not Invented Here" and is antithetical to the open source culture. On the other hand, progress and innovation depends on departing from tradition sometimes. It's a tricky choice, so consider it carefully!
 
 另外一个更大的考虑是：兼容性和广泛的使用率。如果你使用一个现有的标准，你就能够利用到所有遵循这个标准的系统。如果你不选择使用任何标准，你必须要考虑到自己开发所有基础设施的成本或者是劝说他人认可你的新标准。这种忽略现有标准而自行创造新标准的倾向被称为『非我所创』，与开源文化正好相反。在另一方面，进步和创新有时正是离经叛道的结果。所以这是个不太好抉择的问题，仔细考虑吧！
-
+(topsun:1.如果你不选择使用任何标准
+      -->如果你不选择使用这个标准
+        2.所以这是个不太好抉择的问题
+      --> 所以这是个棘手的选择。
 .Wikipedia "Not Invented Here" (https://en.wikipedia.org/wiki/Not_invented_here)
  Not invented here is a stance adopted by social, corporate, or institutional cultures that avoid using or buying already existing products, research, standards, or knowledge because of their external origins and costs, such as royalties.
 
 .维基百科 『非我所创』(https://en.wikipedia.org/wiki/Not_invented_here)
 非我所创或NIH综合症（英文：Not Invented Here Syndrome），指的是社会、公司和组织中的一种文化现象，人们不愿意使用、购买或者接受某种产品、研究成果或者知识，不是出于技术或者法律等因素，而只是因为它源自其他地方。
-
+(topsun:1.人们不愿意使用、购买或者接受某种产品、研究成果或者知识，不是出于技术或者法律等因素，而只是因为它源自其他地方。
+      --> 由于来源于外面以及经费因素（比如版权）人们不愿意使用、购买既有的产品、研究成果 标准或者知识。)
+      
 === Security by maturity
 
 === 安全性成熟度
@@ -915,14 +951,22 @@ As part of this consideration is an even bigger issue: the value of interoperabi
 Beyond the choice of standard, there is the parallel choice of _implementation_. When you decide to use a standard, such as ERC20, you have to then decide how to implement a compatible token. There are a number of existing "reference" implementations that are broadly used in the Ethereum ecosystem. Or you could write your own from scratch. Again, this choice represents a dilemma that can have serious security implications.
 
 除了标准的选择，实现同样也需要选择。当你决定采用某个标准时，比如说 ERC20，你必须接下来决定怎样实现一个 ERC20 兼容的代币。现在已经有一些被以太坊生态广泛使用的『参考』实现。或者你也可以从头开始自己写。这样的选择面临着能够严重影响安全性的两难境地。
+（topsun:或者你也可以从头开始自己写。这样的选择面临着能够严重影响安全性的两难境地。
+      -->或者你也可以从头开始自己写, 但安全性有可能因此受到严重影响。）
 
 Existing implementations are "battle tested". While it is impossible to prove that they are secure, many of them underpin millions of dollars of tokens. They have been attacked, repeatedly and vigorously. So far, no significant vulnerabilities have been discovered. Writing your own is not easy - there are many subtle ways that a contract can be compromised. It is much safer to use a well-tested broadly-used implementation. In our examples above, we used the OpenZeppelin implementation of the ERC20 standard, as this implementation is security focused from the ground up.
 
 现有的标准是『久经沙场』的。虽然说我们不能完全证明这些标准就一定是绝对安全的，但大多数标准都支撑着价值数百万美元的代币。它们一直被不断地、猛烈地攻击着。至少到目前为止，还没有任何明显的漏洞出现。开发一个你自己的标准并不是件容易的事 -- 有太多不太容易察觉的方式可以侵入你的合约。使用一个彻底测试的、广泛采用的实现是相对来说更安全的做法。在我们之前的例子里，我们使用的是 OpenZeppelin 对 ERC20 的实现，因为这个实现从头到尾都非常注重安全性。
+（topsun:1.现有的标准是『久经沙场』的
+       --> 现有的很多实现是『久经沙场』的
+         2.虽然说我们不能完全证明这些标准就一定是绝对安全的，但大多数标准都支撑着价值数百万美元的代币。
+       --> 虽然说我们不能完全证明这些实现就一定是绝对安全的，但其中大多数支撑着价值数百万美元的代币。)
 
 If you use an existing implementation you can also extend it. Again, be careful with this impulse. Complexity is the enemy of security. Every single line of code you add expands the _attack surface_ of your contract and could represent a vulnerability lying in wait. You may not notice a problem until you put a lot of value on top of the contract and someone breaks it.
 
 如果你使用一个现有的实现，你也可以扩展它。同样，对于这样的冲动需要保持冷静。复杂度是安全性的敌人。每一行新加入的代码都扩大了合约的被攻击面或者引入了新的等待被发现的漏洞。你可能并不能意识到某个漏洞知道你在这个合约上面放了非常多的价值，然后别人黑了你的合约。
+（topsun: 你可能并不能意识到某个漏洞知道你在这个合约上面放了非常多的价值，然后别人黑了你的合约。
+       -->你可能并不能意识到某个漏洞直到这个合约价值高升，然后别人黑了你的合约。）
 
 === Extensions to token interface standards
 
@@ -931,6 +975,8 @@ If you use an existing implementation you can also extend it. Again, be careful 
 The token standards discussed in this section start with a very minimal interface, with limited functionality. Many projects have created extended implementations, to support features that they need for their application. Some of these include:
 
 在这一章里讨论过的代币标准一开始都只有非常少的接口，能做非常少的事情。很多项目都做了自己的扩展实现来支持它们自身项目的需求。一些扩展如下：
+（topsun:在这一章里讨论过的代币标准一开始都只有非常少的接口，能做非常少的事情。
+     -->在这一章里讨论过的代币标准一开始只是一个功能有限的简易接口。）
 
 Owner Control:: Specific addresses, or set of addresses (multi-signature) are given special capabilities, such as blacklisting, whitelisting, minting, recovery etc.
 
@@ -939,10 +985,14 @@ Owner Control:: Specific addresses, or set of addresses (multi-signature) are gi
 Burning:: A token burn is when tokens are deliberately destroyed by transfer to an unspendable address or by erasing a balance and reducing the supply.
 
 销毁：销毁一个代币是指当代币被故意转到某个无法使用的地址或者减少余额来达到减少供应的目的。
+（topsun:或者减少余额来达到减少供应的目的
+    --> 或者抹去余额来达到减少供应的目的 ）
 
 Minting:: The ability to add to the total supply of tokens, at a predictable rate, or by "fiat" of the creator of the token.
 
 铸币：以一个可预测的比率增加代币总供应量的能力，或者说代币创造者『发行』代币的能力。
+（topsun:铸币：以一个可预测的比率增加代币总供应量的能力，或者说代币创造者『发行』代币的能力。
+    --> 铸币：增加代币总供应量的能力，这种增长或遵循一个可预测的比率，或取决于代币创造者『发行』代币的意愿/能力。）
 
 Crowdfunding:: The ability to offer tokens for sale, for example through an auction, market sale, reverse-auction, etc.
 
@@ -955,6 +1005,8 @@ Caps:: Pre-defined and immutable limits on the total supply, the opposite of the
 Recovery "Back Doors":: Functions to recover funds, reverse transfers, or dismantle the token that can be activated by a designated address or set of addresses (multi-signature).
 
 恢复『后门』：可以恢复资金、转账或者废除某个代币的函数，这通常可以被一个或多个指定的地址激活。
+（topsun:恢复『后门』：可以恢复资金、转账或者废除某个代币的函数，这通常可以被一个或多个指定的地址激活。
+     -->恢复『后门』：可以恢复资金、撤销转账或者废除某个代币的函数，此类代币通常可以被一个或多个指定的地址激活。）
 
 Whitelisting:: The ability to restrict token transfers only to listed addresses. Most commonly used to offer tokens to "accredited investors" after vetting by the rules of different jurisdictions. There is usually a mechanism for updating the whitelist.
 
@@ -971,6 +1023,8 @@ There are some reference implementations for many of these functions, for exampl
 As previously discussed, the decision to extend a token standard with additional functionality represents a tradeoff between innovation/risk and interoperability/security.
 
 正如之前所讨论的，是否向一个代币标准增加新功能的决策过程实际上是在权衡创新/冒险和兼容性/安全性。
+（topsun:是否向一个代币标准增加新功能的决策过程实际上是在权衡创新/冒险和兼容性/安全性。
+    --> 是否向一个代币标准增加新功能的决策过程实际上是在创新与冒险,兼容性与安全性之间的权衡取舍。）
 
 === Tokens and ICOs
 
@@ -987,3 +1041,5 @@ Nevertheless, the importance and future impact of these standards should not be 
 The trick is to separate the long-term vision and impact of this technology, which is likely to be huge, from the short term bubble of token ICOs, which is rife with fraud. Both can be true at the same time. The token standards and platform will survive the current token mania, and then they will likely change the world.
 
 最重要的是能区分开那些很热门的有着长期愿景和对这项技术的影响的代币，与短期流行的一些 ICO 泡沫。这两者可以同时都成立。但是代币标准和平台会最终挺过这个 ICO 狂热，并且它们很有可能改变这个世界。
+（topsun: 最重要的是能区分开那些很热门的有着长期愿景和对这项技术的影响的代币，与短期流行的一些 ICO 泡沫。
+      -->最重要的是能区分开那些有着长期愿景和对这项技术会产生深远影响的代币，与短期流行的一些 ICO 泡沫，前者的增长潜力巨大。）
