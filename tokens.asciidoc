@@ -797,7 +797,8 @@ The use of the word deed is intended to reflect the "ownership of property" part
 Non-fungible tokens track ownership of a unique thing. The thing owned can be a digital item, such as a game item, or digital collectible. Or, the thing can be a physical item whose ownership is tracked by a token, such as a house, a car, artwork. A deed could also represent things with negative value, such as loans (debt), liens, easements, etc. The ERC721 standard places no limitation or expectation on the nature of the thing whose ownership is tracked by a deed, only that it can be uniquely identified, which in the case of this standard is achieved by a 256-bit identifier.
 
 不可替换的代币追踪对某个独特事物的所有权。被拥有的事物可以是数字虚拟物品，比如一款游戏或是数字藏品。被拥有的事物也可以是现实世界里的物品，比如一栋房子，一辆车或是一件艺术品。一个契据也可以用来代表负向的拥有权比如借款，抵押，地役权等。ERC721 标准并没有对契据可以追踪所有权的事物做任何限制。ERC721通过256位的标识符来实现了被追踪的事物的唯一标识。
-
+(topsun: ERC721 标准并没有对契据可以追踪所有权的事物做任何限制
+      -->ERC721 标准并没有对契据可以追踪所有权的事物做任何限制和期望）
 The details of the standard and discussion are tracked in two different GitHub locations:
 
 此标准的细节和相关讨论记录在下面两个 GitHub 地址里：
