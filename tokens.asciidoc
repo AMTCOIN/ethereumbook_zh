@@ -635,15 +635,21 @@ Tokens don't behave the same way as ether. Ether is sent with the +send+ functio
 Consider another issue. To send ether, or use any Ethereum contract you need ether to pay gas. To send tokens, you _also need ether_. You cannot pay for a transaction's gas with a token and the token contract can't pay the gas for you. This can cause some rather strange user experiences. For example, let's say you use an exchange or Shapeshift to convert some bitcoin to a token. You "receive" the token in a wallet that tracks that token's contract and shows your balance. It looks the same as any of the other cryptocurrencies you have in your wallet. Now try sending the token and your wallet will inform you that you need ether to do that. You might be confused - after all you didn't need ether to receive the token. Perhaps you have no ether. Perhaps you didn't even know the token was an ERC20 token on Ethereum, maybe you thought it was a cryptocurrency with its own blockchain. The illusion just broke.
 
 现在我们来看另一个问题。想要给别人转以太或者使用以太坊合约，你需要以太来支付相应的交易工作量(gas)。想要给别人转代币，你同样需要以太。你无法用代币来支付一笔交易所需的计算工作量，你的代币合约也同样无法为你支付所需的计算工作量。这就会导致一些非常奇怪的用户体验。打比方说你用某个交易所把一些比特币换成了某种代币。你『接收』到了这些代币并且用钱包监听了这个代币的合约以显示你的余额。这跟你在钱包里拥有的其他加密货币看起没有什么不同。但是如果你现在想要把这些代币转出去，你的钱包就会提醒你说你需要有以太才能转账。你可能会觉得非常奇怪，毕竟你接收这些代币的时候都没有需要用到以太。你可能没有以太。你可能根本就不知道这个代币是基于以太坊 ERC20 的一种代币，你可能还觉得它是一种拥有自己区块链的加密货币。不管怎样，这样的臆想在你转不出去账的时候破灭了。
-
+(topsun:1.打比方说你用某个交易所把一些比特币换成了某种代币
+      --> 打比方说你用某个交易所或"Shapeshift"把一些比特币换成了某种代币)
+      
 Some of these issues are specific to ERC20 tokens. Others are more general issues that relate to abstraction and interface boundaries within Ethereum. Some can be solved by changing the token interface, others may need changes to fundamental structures within Ethereum (such as the distinction between EOAs and contracts, and between transactions and messages). Some may not be "solvable" exactly and may require user interface design to hide the nuances and make the user experience consistent regardless of the underlying distinctions.
 
 有些问题是针对于 ERC20 代币的，而其他的是更宽泛的、跟以太坊抽象和接口边界有关的问题。有些问题能通过修改代币接口解决，有的可能需要改变以太坊的基础架构（比如外部拥有账户(EOA)和合约(contract)之间的差异，交易(transaction)和消息(message)之间的差异）。有些差异可能并不能被消除，它们需要通过一些用户界面的隐藏使得用户感知不到内部的细微差异。
-
+(topsun:1.跟以太坊抽象和接口边界有关的问题
+     -->  是一些和以太坊本身的抽象和接口边界有关的问题
+        2.有些差异可能并不能被消除，它们需要通过一些用户界面的隐藏使得用户感知不到内部的细微差异。
+     -->  有些问题可能并不会被完美解决，但通过用户界面设计的技巧，这些问题得以隐藏，从而使用户感知不到内部的细微差异。）
 In the next sections we will look at various proposals that attempt to address some of these issues.
 
 在下面一个章节我们将会介绍一些想要解决以上部分问题的提案。
-
+（topsun:在下面一个章节我们将会介绍一些想要解决以上部分问题的提案。
+    -->  在下面一个章节我们将会介绍一些针对解决以上部分问题的提案。）
 ==== ERC223 - a proposed token contract interface standard
 
 ==== ERC223 - 一个代币合约接口标准提案
